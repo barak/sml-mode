@@ -1,0 +1,41 @@
+sml-mode (3.9.5-5) unstable; urgency=high
+
+  * Got a sponsor!                                   (closes: bug#112060)
+  * Revert to running target install to get sml-mode-startup.el installed.
+    Remove elc files afterwards.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Fri, 26 Oct 2001 11:46:36 +0200
+
+sml-mode (3.9.5-4) unstable; urgency=low
+
+  * Don't include .elc files in package: Only run targets install_el
+    and install_info
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Fri, 26 Oct 2001 01:52:38 +0200
+
+sml-mode (3.9.5-3) unstable; urgency=low
+
+  * postinst now always generates the /etc/emacs/site-start.d/50sml-mode.el
+    file all by itself, and prerm always removes it.  It is thus not a
+    config file anymore.
+
+  * Cleaned up things.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Thu, 25 Oct 2001 18:18:02 +0200
+
+sml-mode (3.9.5-2) unstable; urgency=low
+
+  * Changed "Build-Depends" to "Build-Depends-Indep" in control, as required
+    by policy 7.6.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Tue, 25 Sep 2001 10:07:51 +0200
+
+sml-mode (3.9.5-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Wed, 12 Sep 2001 15:43:19 +0200
+
+Local variables:
+mode: debian-changelog
+End:

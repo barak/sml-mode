@@ -1,0 +1,9 @@
+Template: sml-mode/default
+Type: boolean
+Default: true
+Description: Should sml-mode be auto-loaded by default at your site?
+ Emacs has no standard SML major mode, so it is generally a good idea to let
+ emacs load sml-mode globally (i.e., for all users on this site).
+ .
+ If you answer no, people who desire to use it will have to put the string
+ "(require 'sml-mode)" in their "~/.emacs" to load it.

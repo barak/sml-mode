@@ -1,0 +1,9 @@
+This package was debianised by Jens Peter Secher <jpsecher@diku.dk> on
+Wed, 12 Sep 2001 15:14:01 +0200.
+
+It was downloaded from 
+ftp://flint.cs.yale.edu/pub/monnier/sml-mode/sml-mode-3.9.5.tar.gz
+
+Upstream Author: Stefan Monnier <monnier+lists/emacs/sml@tequila.cs.yale.edu>
+
+Copyright: GPL (see /usr/share/common-licenses/GPL)

@@ -1,0 +1,14 @@
+Source: sml-mode
+Section: utils
+Priority: optional
+Maintainer: Jens Peter Secher <jpsecher@diku.dk>
+Build-Depends-Indep: debhelper (>> 3.0.0), texinfo
+Standards-Version: 3.5.2
+
+Package: sml-mode
+Architecture: all
+Depends: emacs20 | emacsen, debconf
+Description: A major Emacs mode for editing Standard ML.
+ It provides syntax highlighting and automatic indentation and
+ comes with sml-proc which allows interaction with an inferior SML
+ interactive loop.

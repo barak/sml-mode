@@ -21,11 +21,8 @@
 # load the package-specific settings
 include makefile.pkg
 
-# Added for Debianisation (20010912 jpsecher@diku.dk)
-DESTDIR=
-
 # set up the usual installation paths
-prefix  = $(DESTDIR)/usr
+prefix  = /usr/local
 datadir = $(prefix)/share
 
 # the directory where you install third-party emacs packges
@@ -46,8 +43,8 @@ startupfile = $(lispdir)/site-start.el
 elibdir = $(lispdir)/elib
 
 # the directory where you install the info doc
-infodir = $(datadir)/info
-docdir = $(datadir)/doc
+infodir = $(prefix)/info
+docdir = $(prefix)/doc
 
 EMACS	= emacs
 MAKEINFO= makeinfo
@@ -137,7 +134,7 @@ install_dvi: dvi
 	$(MKDIR) $(docdir)
 	$(CP) `find . -type f -name '*.dvi' -print` $(docdir)/
 
-install: install_elc install_info install_el
+install: install_elc install_info install_startup install_el
 
 clean:
 	$(RM) *~ core .\#* $(TEXEXTS)

@@ -1,3 +1,48 @@
+sml-mode (3.9.5-10) unstable; urgency=low
+
+  * Changed priority back to optional and Build-Depends-Indep to
+    Build-Depends.
+  * Converted to using dpatch.
+  * Applied patch from Sebastian Schaffert to fix xemacs problem when
+    sending the buffer contents to the interpreter. Part of bug#274266.
+  * Included a watch file.
+    
+ -- Jens Peter Secher <jps@debian.org>  Sun, 10 Oct 2004 00:29:58 +0200
+
+sml-mode (3.9.5-9) unstable; urgency=low
+
+  * Bumped Standards-Version: 3.6.1.
+  * Remove obsolete debconf questions.
+  * The source only seems to be available from
+    ftp://ftp.research.bell-labs.com/dist/smlnj/contrib/emacs/ now.
+  * Corrected Maintainer field.
+
+ -- Jens Peter Secher <jps@debian.org>  Mon, 15 Sep 2003 20:15:14 +0200
+
+sml-mode (3.9.5-8) unstable; urgency=low
+
+  * Autoload sml-mode top-level functions site-wide.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Sun,  1 Dec 2002 17:28:19 +0100
+
+sml-mode (3.9.5-7) unstable; urgency=low
+
+  * Added "emacs21 |emacsen" to Build-Depends-Indep and changed
+    Depends-Indep accordingly.                       (closes: bug#142137)
+  * Removed unnecessary debconf notes and questions.
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Wed,  7 Aug 2002 23:03:24 +0200
+
+sml-mode (3.9.5-6) unstable; urgency=low
+
+  * Bumped Standards-Version: 3.5.6.
+  * Change section: utils -> editors.
+  * Inserted german translation of Debconf templates, thanks to
+    Sebastian Feltel <sebastian@feltel.de> (although some characters are
+    wrong).                                          (closes: bug#118041)
+
+ -- Jens Peter Secher <jpsecher@diku.dk>  Fri, 28 Dec 2001 10:39:15 +0100
+
 sml-mode (3.9.5-5) unstable; urgency=high
 
   * Got a sponsor!                                   (closes: bug#112060)
@@ -35,7 +80,3 @@ sml-mode (3.9.5-1) unstable; urgency=low
   * Initial Release.
 
  -- Jens Peter Secher <jpsecher@diku.dk>  Wed, 12 Sep 2001 15:43:19 +0200
-
-Local variables:
-mode: debian-changelog
-End:

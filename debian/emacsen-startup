@@ -1,0 +1,8 @@
+;; -*-emacs-lisp-*-
+(setq load-path (cons (concat "/usr/share/"
+                              (symbol-name flavor)
+                              "/site-lisp/sml-mode") load-path))
+;; Autoload sml-mode top-level functions site-wide.
+(load "sml-mode-startup")
+
+

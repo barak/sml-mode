@@ -1,14 +1,16 @@
 Source: sml-mode
-Section: utils
+Section: editors
 Priority: optional
-Maintainer: Jens Peter Secher <jpsecher@diku.dk>
-Build-Depends-Indep: debhelper (>> 3.0.0), texinfo
-Standards-Version: 3.5.2
+Maintainer: Jens Peter Secher <jps@debian.org>
+Build-Depends: debhelper (>= 4), dpatch, texinfo, emacs21 | emacsen
+Standards-Version: 3.6.1
 
 Package: sml-mode
 Architecture: all
-Depends: emacs20 | emacsen, debconf
-Description: A major Emacs mode for editing Standard ML.
- It provides syntax highlighting and automatic indentation and
- comes with sml-proc which allows interaction with an inferior SML
- interactive loop.
+Depends: emacs21 | emacsen
+Enhances: sml-nj, mlton, mosml
+Description: a major Emacs mode for editing Standard ML
+ This emacs mode provides syntax highlighting and automatic
+ indentation for Standard ML and comes with sml-proc which allows
+ interaction with an inferior SML interactive loop.  You will need
+ this if you write Standard ML programs using Emacs.

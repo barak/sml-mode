@@ -1,6 +1,6 @@
 ;;; sml-move.el --- Buffer navigation functions for sml-mode
 
-;; Copyright (C) 1999-2000  Stefan Monnier <monnier@cs.yale.edu>
+;; Copyright (C) 1999, 2000, 2004  Stefan Monnier <monnier@gnu.org>
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -81,7 +81,8 @@
 
 (defconst sml-syntax-prec
   (sml-preproc-alist
-   `(((";" "," "in" "with") . 10)
+   `((("in" "with") . 10)
+     ((";" ",") . 20)
      (("=>" "d=" "=of") . (65 . 40))
      ("|" . (47 . 30))
      (("case" "of" "fn") . 45)
@@ -192,6 +193,11 @@ This assumes that we are `looking-at' the OP."
       (save-excursion
 	(sml-backward-sym-1)
 	(if (sml-nested-of-p) "of" "=of")))
+     ;; ((equal sym "datatype")
+     ;;  (save-excursion
+     ;; 	(sml-backward-sym-1)
+     ;; 	(sml-backward-spaces)
+     ;; 	(if (eq (preceding-char) ?=) "=datatype" sym)))
      (t sym))))
 
 (defun sml-backward-sym-1 ()
@@ -209,17 +215,20 @@ This assumes that we are `looking-at' the OP."
 	  (cond
 	   ((string= sym "=") (if (sml-poly-equal-p) "=" "d="))
 	   ((string= sym "of") (if (sml-nested-of-p) "of" "=of"))
+	   ;; ((string= sym "datatype")
+	   ;;  (save-excursion (sml-backward-spaces)
+	   ;; 		    (if (eq (preceding-char) ?=) "=datatype" sym)))
 	   (t sym)))))))
     
 
 (defun sml-backward-sexp (prec)
-  "Moves one sexp backward if possible, or one char else.
-Returns T if the move indeed moved through one sexp and NIL if not."
+  "Move one sexp backward if possible, or one char else.
+Returns t if the move indeed moved through one sexp and nil if not.
+PREC is the precedence currently looked for."
   (let ((parse-sexp-lookup-properties t)
 	(parse-sexp-ignore-comments t))
     (sml-backward-spaces)
-    (let* ((point (point))
-	   (op (sml-backward-sym))
+    (let* ((op (sml-backward-sym))
 	   (op-prec (sml-op-prec op 'back))
 	   match)
       (cond
@@ -252,8 +261,7 @@ Returns T if the move indeed moved through one sexp and NIL if not."
   (let ((parse-sexp-lookup-properties t)
 	(parse-sexp-ignore-comments t))
     (sml-forward-spaces)
-    (let* ((point (point))
-	   (op (sml-forward-sym))
+    (let* ((op (sml-forward-sym))
 	   (op-prec (sml-op-prec op 'forw))
 	   match)
       (cond

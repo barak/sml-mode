@@ -1,2 +1,2 @@
 25_install_into_datadir
-50_xemacs_send_buffer_contents
+50_check_for_charsetp

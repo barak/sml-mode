@@ -1,3 +1,29 @@
+sml-mode (4.0-3) experimental; urgency=low
+
+  * Fixed the automatic pacthing of bug#286190.
+  * Fixed the get-orig-source target in debian/rules.
+  
+ -- Jens Peter Secher <jps@debian.org>  Sat, 18 Dec 2004 16:46:10 +0100
+
+sml-mode (4.0-2) experimental; urgency=low
+
+  * Fix MULE dependent compile problem with XEmacs. (closes: bug#286190)
+
+ -- Jens Peter Secher <jps@debian.org>  Sat, 18 Dec 2004 16:01:32 +0100
+
+sml-mode (4.0-1) experimental; urgency=low
+
+  * New upstream release. (closes: bug#284261)
+
+ -- Jens Peter Secher <jps@debian.org>  Sun,  5 Dec 2004 19:08:57 +0100
+
+sml-mode (3.9.5-11) unstable; urgency=low
+
+  * deian/rules: some missing phony targets added.
+  * Updated watch file.
+
+ -- Jens Peter Secher <jps@debian.org>  Sun,  5 Dec 2004 19:04:00 +0100
+
 sml-mode (3.9.5-10) unstable; urgency=low
 
   * Changed priority back to optional and Build-Depends-Indep to

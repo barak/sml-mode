@@ -1,2 +1,2 @@
 version=2
-ftp://ftp.research.bell-labs.com/dist/smlnj/contrib/emacs/sml-mode-(.*)\.tar\.gz debian uupdate
+http://www-perso.iro.umontreal.ca/~monnier/elisp/sml-mode-(.*)\.tar\.gz debian uupdate

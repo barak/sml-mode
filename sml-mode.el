@@ -1,8 +1,8 @@
 ;;; sml-mode.el --- Major mode for editing (Standard) ML
 
-;; Copyright (C) 1989       Lars Bo Nielsen
+;; Copyright (C) 1999,2000,2004  Stefan Monnier
 ;; Copyright (C) 1994-1997  Matthew J. Morley
-;; Copyright (C) 1999-2000  Stefan Monnier
+;; Copyright (C) 1989       Lars Bo Nielsen
 
 ;; Author: Lars Bo Nielsen
 ;;      Olin Shivers
@@ -13,8 +13,8 @@
 ;;      (Stefan Monnier) monnier@cs.yale.edu
 ;; Maintainer: (Stefan Monnier) monnier+lists/emacs/sml@flint.cs.yale.edu
 ;; Keywords: SML
-;; 1.25
-;; 2000/12/24 19:59:53
+;; 1.35
+;; 2004/11/23 05:13:59
 
 ;; This file is not part of GNU Emacs, but it is distributed under the
 ;; same conditions.
@@ -103,7 +103,15 @@
   "*If non-nil, `\;' will self insert, reindent the line, and do a newline.
 If nil, just insert a `\;'.  (To insert while t, do: \\[quoted-insert] \;)."
   :group 'sml
-  :type '(boolean))
+  :type 'boolean)
+
+(defcustom sml-rightalign-and t
+  "If non-nil, right-align `and' with its leader.
+If nil:					If t:
+	datatype a = A				datatype a = A
+	and b = B				     and b = B"
+  :group 'sml
+  :type 'boolean)
 
 ;;; OTHER GENERIC MODE VARIABLES
 
@@ -160,14 +168,118 @@ Full documentation will be available after autoloading the function."))
 	       "with" "withtype" "o")
   "A regexp that matches any and all keywords of SML.")
 
+(defconst sml-tyvarseq-re
+  "\\(\\('+\\(\\sw\\|\\s_\\)+\\|(\\([,']\\|\\sw\\|\\s_\\|\\s-\\)+)\\)\\s-+\\)?")
+
+;;; Font-lock settings ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defcustom sml-font-lock-symbols nil
+  "Display \\ and -> and such using symbols in fonts.
+This may sound like a neat trick, but be extra careful: it changes the
+alignment and can thus lead to nasty surprises w.r.t layout.
+If t, try to use whichever font is available.  Otherwise you can
+set it to a particular font of your preference among `japanese-jisx0208'
+and `unicode'."
+  :type '(choice (const nil)
+	         (const t)
+	         (const unicode)
+	         (const japanese-jisx0208)))
+
+(defconst sml-font-lock-symbols-alist
+  (append
+   ;; The symbols can come from a JIS0208 font.
+   (and (fboundp 'make-char) (charsetp 'japanese-jisx0208)
+	(memq sml-font-lock-symbols '(t japanese-jisx0208))
+	(list (cons "fn" (make-char 'japanese-jisx0208 38 75))
+	      (cons "andalso" (make-char 'japanese-jisx0208 34 74))
+	      (cons "orelse" (make-char 'japanese-jisx0208 34 75))
+	      ;; (cons "as" (make-char 'japanese-jisx0208 34 97))
+	      (cons "not" (make-char 'japanese-jisx0208 34 76))
+	      (cons "div" (make-char 'japanese-jisx0208 33 96))
+	      ;; (cons "*" (make-char 'japanese-jisx0208 33 95))
+	      (cons "->" (make-char 'japanese-jisx0208 34 42))
+	      (cons "=>" (make-char 'japanese-jisx0208 34 77))
+	      (cons "<-" (make-char 'japanese-jisx0208 34 43))
+	      (cons "<>" (make-char 'japanese-jisx0208 33 98))
+	      (cons ">=" (make-char 'japanese-jisx0208 33 102))
+	      (cons "<=" (make-char 'japanese-jisx0208 33 101))
+	      (cons "..." (make-char 'japanese-jisx0208 33 68))
+	      ;; Some greek letters for type parameters.
+	      (cons "'a" (make-char 'japanese-jisx0208 38 65))
+	      (cons "'b" (make-char 'japanese-jisx0208 38 66))
+	      (cons "'c" (make-char 'japanese-jisx0208 38 67))
+	      (cons "'d" (make-char 'japanese-jisx0208 38 68))
+	      ))
+   ;; Or a unicode font.
+   (and (fboundp 'decode-char)
+	(memq sml-font-lock-symbols '(t unicode))
+	(list (cons "fn" (decode-char 'ucs 955))
+	      (cons "andalso" (decode-char 'ucs 8896))
+	      (cons "orelse" (decode-char 'ucs 8897))
+	      ;; (cons "as" (decode-char 'ucs 8801))
+	      (cons "not" (decode-char 'ucs 160))
+	      (cons "div" (decode-char 'ucs 247))
+	      (cons "*" (decode-char 'ucs 215))
+	      (cons "o"  (decode-char 'ucs 9675))
+	      (cons "->" (decode-char 'ucs 8594))
+	      (cons "=>" (decode-char 'ucs 8658))
+	      (cons "<-" (decode-char 'ucs 8592))
+	      (cons "<>" (decode-char 'ucs 8800))
+	      (cons ">=" (decode-char 'ucs 8805))
+	      (cons "<=" (decode-char 'ucs 8804))
+	      (cons "..." (decode-char 'ucs 8943))
+	      ;; (cons "::" (decode-char 'ucs 8759))
+	      ;; Some greek letters for type parameters.
+	      (cons "'a" (decode-char 'ucs 945))
+	      (cons "'b" (decode-char 'ucs 946))
+	      (cons "'c" (decode-char 'ucs 947))
+	      (cons "'d" (decode-char 'ucs 948))
+	      ))))
+
+(defun sml-font-lock-compose-symbol (alist)
+  "Compose a sequence of ascii chars into a symbol.
+Regexp match data 0 points to the chars."
+  ;; Check that the chars should really be composed into a symbol.
+  (let* ((start (match-beginning 0))
+	 (end (match-end 0))
+	 (syntaxes (if (eq (char-syntax (char-after start)) ?w)
+		       '(?w) '(?. ?\\))))
+    (if (or (memq (char-syntax (or (char-before start) ?\ )) syntaxes)
+	    (memq (char-syntax (or (char-after end) ?\ )) syntaxes)
+	    (memq (get-text-property start 'face)
+		  '(font-lock-doc-face font-lock-string-face
+		    font-lock-comment-face)))
+	;; No composition for you.  Let's actually remove any composition
+	;; we may have added earlier and which is now incorrect.
+	(remove-text-properties start end '(composition))
+      ;; That's a symbol alright, so add the composition.
+      (compose-region start end (cdr (assoc (match-string 0) alist)))))
+  ;; Return nil because we're not adding any face property.
+  nil)
+
+(defun sml-font-lock-symbols-keywords ()
+  (when (fboundp 'compose-region)
+    (let ((alist nil))
+      (dolist (x sml-font-lock-symbols-alist)
+	(when (and (if (fboundp 'char-displayable-p)
+		       (char-displayable-p (cdr x))
+		     t)
+		   (not (assoc (car x) alist)))	;Not yet in alist.
+	  (push x alist)))
+      (when alist
+	`((,(regexp-opt (mapcar 'car alist) t)
+	   (0 (sml-font-lock-compose-symbol ',alist))))))))
+
+;; The font lock regular expressions.
+
 (defconst sml-font-lock-keywords
   `(;;(sml-font-comments-and-strings)
-    ("\\<\\(fun\\|and\\)\\s-+\\('\\sw+\\s-+\\)*\\(\\sw+\\)"
+    (,(concat "\\<\\(fun\\|and\\)\\s-+" sml-tyvarseq-re "\\(\\sw+\\)\\s-+[^ \t\n=]")
      (1 font-lock-keyword-face)
-     (3 font-lock-function-name-face))
-    ("\\<\\(\\(data\\|abs\\|with\\|eq\\)?type\\)\\s-+\\('\\sw+\\s-+\\)*\\(\\sw+\\)"
+     (6 font-lock-function-name-face))
+    (,(concat "\\<\\(\\(data\\|abs\\|with\\|eq\\)?type\\)\\s-+" sml-tyvarseq-re "\\(\\sw+\\)")
      (1 font-lock-keyword-face)
-     (4 font-lock-type-def-face))
+     (7 font-lock-type-def-face))
     ("\\<\\(val\\)\\s-+\\(\\sw+\\>\\s-*\\)?\\(\\sw+\\)\\s-*[=:]"
      (1 font-lock-keyword-face)
      ;;(6 font-lock-variable-def-face nil t)
@@ -179,7 +291,8 @@ Full documentation will be available after autoloading the function."))
      (1 font-lock-keyword-face)
      (2 font-lock-interface-def-face))
     
-    (,sml-keywords-regexp . font-lock-keyword-face))
+    (,sml-keywords-regexp . font-lock-keyword-face)
+    ,@(sml-font-lock-symbols-keywords))
   "Regexps matching standard SML keywords.")
 
 (defface font-lock-type-def-face
@@ -203,9 +316,9 @@ Full documentation will be available after autoloading the function."))
 (defvar font-lock-interface-def-face 'font-lock-interface-def-face
   "Face name to use for interface definitions.")
 
-;;;
-;;; Code to handle nested comments and unusual string escape sequences
-;;;
+;;
+;; Code to handle nested comments and unusual string escape sequences
+;;
 
 (defsyntax sml-syntax-prop-table
   '((?\\ . ".") (?* . "."))
@@ -215,7 +328,7 @@ Full documentation will be available after autoloading the function."))
 (defun sml-get-depth-st ()
   (save-excursion
     (let* ((disp (if (eq (char-before) ?\)) (progn (backward-char) -1) nil))
-	   (foo (backward-char))
+	   (_ (backward-char))
 	   (disp (if (eq (char-before) ?\() (progn (backward-char) 0) disp))
 	   (pt (point)))
       (when disp
@@ -257,7 +370,11 @@ Full documentation will be available after autoloading the function."))
 	(let ((kind (match-string 2))
 	      (column (progn (goto-char (match-beginning 2)) (current-column)))
 	      (location
-	       (progn (goto-char (match-end 0)) (sml-forward-spaces) (point)))
+	       (progn (goto-char (match-end 0))
+		      (sml-forward-spaces)
+		      (when (looking-at sml-tyvarseq-re)
+			(goto-char (match-end 0)))
+		      (point)))
 	      (name (sml-forward-sym)))
 	  ;; Eliminate trivial renamings.
 	  (when (or (not (member kind '("structure" "signature")))
@@ -270,10 +387,11 @@ Full documentation will be available after autoloading the function."))
 
 ;;; MORE CODE FOR SML-MODE
 
-;;;###Autoload
+;;;###autoload (add-to-list 'load-path (file-name-directory load-file-name))
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.s\\(ml\\|ig\\)\\'" . sml-mode))
 
-;;;###Autoload
+;;;###autoload
 (define-derived-mode sml-mode fundamental-mode "SML"
   "\\<sml-mode-map>Major mode for editing ML code.
 This mode runs `sml-mode-hook' just before exiting.
@@ -284,11 +402,15 @@ This mode runs `sml-mode-hook' just before exiting.
        'sml-imenu-create-index)
   (set (make-local-variable 'add-log-current-defun-function)
        'sml-current-fun-name)
+  ;; Treat paragraph-separators in comments as paragraph-separators.
+  (set (make-local-variable 'paragraph-separate)
+       (concat "\\([ \t]*\\*)?\\)?\\(" paragraph-separate "\\)"))
+  (set (make-local-variable 'require-final-newline) t)
   ;; forward-sexp-function is an experimental variable in my hacked Emacs.
   (set (make-local-variable 'forward-sexp-function) 'sml-user-forward-sexp)
   ;; For XEmacs
   (easy-menu-add sml-mode-menu)
-  ;; Compatibility
+  ;; Compatibility.  FIXME: we should use `-' in Emacs-CVS.
   (unless (boundp 'skeleton-positions) (set (make-local-variable '@) nil))
   (sml-mode-variables))
 
@@ -297,17 +419,25 @@ This mode runs `sml-mode-hook' just before exiting.
   (setq local-abbrev-table sml-mode-abbrev-table)
   ;; A paragraph is separated by blank lines or ^L only.
   
-  (set (make-local-variable 'paragraph-start)
-       (concat "^[\t ]*$\\|" page-delimiter))
-  (set (make-local-variable 'paragraph-separate) paragraph-start)
   (set (make-local-variable 'indent-line-function) 'sml-indent-line)
   (set (make-local-variable 'comment-start) "(* ")
   (set (make-local-variable 'comment-end) " *)")
   (set (make-local-variable 'comment-nested) t)
   ;;(set (make-local-variable 'block-comment-start) "* ")
   ;;(set (make-local-variable 'block-comment-end) "")
-  (set (make-local-variable 'comment-column) 40)
+  ;; (set (make-local-variable 'comment-column) 40)
   (set (make-local-variable 'comment-start-skip) "(\\*+\\s-*"))
+
+(defun sml-funname-of-and ()
+  "Name of the function this `and' defines, or nil if not a function.
+Point has to be right after the `and' symbol and is not preserved."
+  (sml-forward-spaces)
+  (if (looking-at sml-tyvarseq-re) (goto-char (match-end 0)))
+  (let ((sym (sml-forward-sym)))
+    (sml-forward-spaces)
+    (unless (or (member sym '(nil "d="))
+		(member (sml-forward-sym) '("d=")))
+      sym)))
 
 (defun sml-electric-pipe ()
   "Insert a \"|\".
@@ -333,14 +463,8 @@ Depending on the context insert the name of function, a \"=>\" etc."
 		   ((looking-at "=") (concat f "  = "))))) ;a function
 	       ((string= sym "and")
 		;; could be a datatype or a function
-		(while (and (setq sym (sml-forward-sym))
-			    (string-match "^'" sym))
-		  (sml-forward-spaces))
-		(sml-forward-spaces)
-		(if (or (not sym)
-			(equal (sml-forward-sym) "d="))
-		    ""
-		  (concat sym "  = ")))
+		(setq sym (sml-funname-of-and))
+		(if sym (concat sym "  = ") ""))
 	       ;; trivial cases
 	       ((string= sym "fun")
 		(while (and (setq sym (sml-forward-sym))
@@ -357,7 +481,7 @@ Depending on the context insert the name of function, a \"=>\" etc."
      (skip-chars-forward "\t |")
      (skip-syntax-forward "w")
      (skip-chars-forward "\t ")
-     (when (= ?= (char-after)) (backward-char)))))
+     (when (eq ?= (char-after)) (backward-char)))))
 
 (defun sml-electric-semi ()
   "Insert a \;.
@@ -408,6 +532,8 @@ If anyone has a good algorithm for this..."
       (while (> depth 0)
 	(if (re-search-backward "(\\*\\|\\*)" nil t)
 	    (cond
+	     ;; FIXME: That's just a stop-gap.
+	     ((eq (get-text-property (point) 'face) 'font-lock-string-face))
 	     ((looking-at "*)") (incf depth))
 	     ((looking-at comment-start-skip) (decf depth)))
 	  (setq depth -1)))
@@ -423,16 +549,15 @@ If anyone has a good algorithm for this..."
      ;; proper indentation of the next line.
      (when (looking-at "(\\*") (sml-forward-spaces))
      (let (data
-	   (sml-point (point))
 	   (sym (save-excursion (sml-forward-sym))))
        (or
-	;; allow the user to override the indentation
+	;; Allow the user to override the indentation.
 	(when (looking-at (concat ".*" (regexp-quote comment-start)
 				  "[ \t]*fixindent[ \t]*"
 				  (regexp-quote comment-end)))
 	  (current-indentation))
 
-	;; continued comment
+	;; Continued comment.
 	(and (looking-at "\\*") (sml-find-comment-indent))
 
 	;; Continued string ? (Added 890113 lbn)
@@ -446,22 +571,46 @@ If anyone has a good algorithm for this..."
 		     (1+ (current-column))
 		   0))))
 
+	;; Closing parens.  Could be handled below with `sml-indent-relative'?
+	(and (looking-at "\\s)")
+	     (save-excursion
+	       (skip-syntax-forward ")")
+	       (backward-sexp 1)
+	       (if (sml-dangling-sym)
+		   (sml-indent-default 'noindent)
+		 (current-column))))
+
 	(and (setq data (assoc sym sml-close-paren))
 	     (sml-indent-relative sym data))
 
-	(and (member (save-excursion (sml-forward-sym)) sml-starters-syms)
-	     (let ((sym (unless (save-excursion (sml-backward-arg))
-			  (sml-backward-spaces)
-			  (sml-backward-sym))))
-	       (if sym (sml-get-sym-indent sym)
-		 ;; FIXME: this can take a *long* time !!
-		 (sml-find-matching-starter sml-starters-syms)
-		 (current-column))))
+	(and (member sym sml-starters-syms)
+	     (sml-indent-starter sym))
 
 	(and (string= sym "|") (sml-indent-pipe))
 
 	(sml-indent-arg)
 	(sml-indent-default))))))
+
+(defsubst sml-bolp ()
+  (save-excursion (skip-chars-backward " \t|") (bolp)))
+
+(defun sml-indent-starter (orig-sym)
+  "Return the indentation to use for a symbol in `sml-starters-syms'.
+Point should be just before the symbol ORIG-SYM and is not preserved."
+  (let ((sym (unless (save-excursion (sml-backward-arg))
+	       (sml-backward-spaces)
+	       (sml-backward-sym))))
+    (if (member sym '(";" "d=")) (setq sym nil))
+    (if sym (sml-get-sym-indent sym)
+      ;; FIXME: this can take a *long* time !!
+      (setq sym (sml-find-matching-starter sml-starters-syms))
+      ;; Don't align with `and' because it might be specially indented.
+      (if (and (or (equal orig-sym "and") (not (equal sym "and")))
+	       (sml-bolp))
+	  (+ (current-column)
+	     (if (and sml-rightalign-and (equal orig-sym "and"))
+		 (- (length sym) 3) 0))
+	(sml-indent-starter orig-sym)))))
 
 (defun sml-indent-relative (sym data)
   (save-excursion
@@ -477,7 +626,11 @@ If anyone has a good algorithm for this..."
       (if (string= sym "|")
 	  (if (sml-bolp) (current-column) (sml-indent-pipe))
 	(let ((pipe-indent (or (cdr (assoc "|" sml-symbol-indent)) -2)))
-	  (when (member sym '("datatype" "abstype"))
+	  (when (or (member sym '("datatype" "abstype"))
+		    (and (equal sym "and")
+			 (save-excursion
+			   (forward-word 1)
+			   (not (sml-funname-of-and)))))
 	    (re-search-forward "="))
 	  (sml-forward-sym)
 	  (sml-forward-spaces)
@@ -509,18 +662,21 @@ If anyone has a good algorithm for this..."
 	 (current-column))))
 
 (defun sml-get-indent (data sym)
-  (let ((head-sym (pop data)) d)
+  (let (d)
     (cond
      ((not (listp data)) data)
-     ((setq d (member sym data)) (second d))
+     ((setq d (member sym data)) (cadr d))
      ((and (consp data) (not (stringp (car data)))) (car data))
      (t sml-indent-level))))
 
 (defun sml-dangling-sym ()
+  "Non-nil if the symbol after point is dangling.
+The symbol can be an SML symbol or an open-paren. \"Dangling\" means that
+it is not on its own line but is the last element on that line."
   (save-excursion
     (and (not (sml-bolp))
 	 (< (sml-point-after (end-of-line))
-	    (sml-point-after (sml-forward-sym)
+	    (sml-point-after (or (sml-forward-sym) (skip-syntax-forward "("))
 			     (sml-forward-spaces))))))
 
 (defun sml-delegated-indent ()
@@ -532,12 +688,11 @@ If anyone has a good algorithm for this..."
 
 (defun sml-get-sym-indent (sym &optional style)
   "Find the indentation for the SYM we're `looking-at'.
-If indentation is delegated, the point will be at the start of
-the parent at the end of this function.
-Optional argument STYLE is currently ignored"
+If indentation is delegated, point will move to the start of the parent.
+Optional argument STYLE is currently ignored."
   (assert (equal sym (save-excursion (sml-forward-sym))))
   (save-excursion
-    (let ((delegate (assoc sym sml-close-paren))
+    (let ((delegate (and (not (equal sym "end")) (assoc sym sml-close-paren)))
 	  (head-sym sym))
       (when (and delegate (not (eval (third delegate))))
 	;;(sml-find-match-backward sym delegate)
@@ -551,7 +706,7 @@ Optional argument STYLE is currently ignored"
 	(when idata
 	  ;;(if (or style (not delegate))
 	  ;; normal indentation
-	  (let ((indent (sml-get-indent idata sym)))
+	  (let ((indent (sml-get-indent (cdr idata) sym)))
 	    (when indent (+ (sml-delegated-indent) indent)))
 	  ;; delgate indentation to the parent
 	  ;;(sml-forward-sym) (sml-backward-sexp nil)
@@ -559,24 +714,36 @@ Optional argument STYLE is currently ignored"
 	  ;;     (parent-indent (cdr (assoc parent-sym sml-indent-starters))))
 	  ;; check the special rules
 	  ;;(+ (sml-delegated-indent)
-	  ;; (or (sml-get-indent indent-data 1 'strict)
-	  ;; (sml-get-indent parent-indent 1 'strict)
-	  ;; (sml-get-indent indent-data 0)
-	  ;; (sml-get-indent parent-indent 0))))))))
+	  ;; (or (sml-get-indent (cdr indent-data) 1 'strict)
+	  ;; (sml-get-indent (cdr parent-indent) 1 'strict)
+	  ;; (sml-get-indent (cdr indent-data) 0)
+	  ;; (sml-get-indent (cdr parent-indent) 0))))))))
 	  )))))
 
 (defun sml-indent-default (&optional noindent)
   (let* ((sym-after (save-excursion (sml-forward-sym)))
 	 (_ (sml-backward-spaces))
 	 (sym-before (sml-backward-sym))
-	 (sym-indent (and sym-before (sml-get-sym-indent sym-before))))
-    (if sym-indent
-	;; the previous sym is an indentation introducer: follow the rule
-	(let ((indent-after (or (cdr (assoc sym-after sml-symbol-indent)) 0)))
-	  (if noindent
-	      ;;(current-column)
-	      sym-indent
-	    (+ sym-indent indent-after)))
+	 (sym-indent (and sym-before (sml-get-sym-indent sym-before)))
+	 (indent-after (or (cdr (assoc sym-after sml-symbol-indent)) 0)))
+    (when (equal sym-before "end")
+      ;; I don't understand what's really happening here, but when
+      ;; it's `end' clearly, we need to do something special.
+      (forward-word 1)
+      (setq sym-before nil sym-indent nil))
+    (cond
+     (sym-indent
+      ;; the previous sym is an indentation introducer: follow the rule
+      (if noindent
+	  ;;(current-column)
+	  sym-indent
+	(+ sym-indent indent-after)))
+     ;; If we're just after a hanging open paren.
+     ((and (eq (char-syntax (preceding-char)) ?\()
+	   (save-excursion (backward-char) (sml-dangling-sym)))
+      (backward-char)
+      (sml-indent-default))
+     (t
       ;; default-default
       (let* ((prec-after (sml-op-prec sym-after 'back))
 	     (prec (or (sml-op-prec sym-before 'back) prec-after 100)))
@@ -584,21 +751,27 @@ Optional argument STYLE is currently ignored"
 	;; "current one", or until you backed over a sym that has the same prec
 	;; but is at the beginning of a line.
 	(while (and (not (sml-bolp))
-		    (sml-move-if (sml-backward-sexp (1- prec)))
+		    (while (sml-move-if (sml-backward-sexp (1- prec))))
 		    (not (sml-bolp)))
 	  (while (sml-move-if (sml-backward-sexp prec))))
-	;; the `noindent' case does back over an introductory symbol
-	;; such as `fun', ...
-	(when noindent
-	  (sml-move-if
-	   (sml-backward-spaces)
-	   (member (sml-backward-sym) sml-starters-syms)))
-	(current-column)))))
-
-
-(defun sml-bolp ()
-  (save-excursion
-    (skip-chars-backward " \t|") (bolp)))
+	(if noindent
+	    ;; the `noindent' case does back over an introductory symbol
+	    ;; such as `fun', ...
+	    (progn
+	      (sml-move-if
+	       (sml-backward-spaces)
+	       (member (sml-backward-sym) sml-starters-syms))
+	      (current-column))
+	  ;; Use `indent-after' for cases such as when , or ; should be
+	  ;; outdented so that their following terms are aligned.
+	  (+ (if (progn
+		   (if (equal sym-after ";")
+		       (sml-move-if
+			(sml-backward-spaces)
+			(member (sml-backward-sym) sml-starters-syms)))
+		   (and sym-after (not (looking-at sym-after))))
+		 indent-after 0)
+	     (current-column))))))))
 
 
 ;; maybe `|' should be set to word-syntax in our temp syntax table ?
@@ -616,7 +789,7 @@ Optional argument STYLE is currently ignored"
 	  (progn (sml-backward-sexp prec)
 		 (setq sym (save-excursion (sml-forward-sym)))
 		 (not (or (member sym syms) (bobp)))))
-      (unless (bobp) sym))))
+      (if (member sym syms) sym))))
 
 (defun sml-skip-siblings ()
   (while (and (not (bobp)) (sml-backward-arg))
@@ -678,7 +851,11 @@ signature, structure, and functor by default.")
     (let ((fsym (intern (concat "sml-form-" name))))
       `(progn
 	 (add-to-list 'sml-forms-alist ',(cons name fsym))
-	 (define-abbrev sml-mode-abbrev-table ,name "" ',fsym)
+	 (condition-case err
+	     ;; Try to use the new `system' flag.
+	     (define-abbrev sml-mode-abbrev-table ,name "" ',fsym nil 'system)
+	   (wrong-number-of-arguments
+	    (define-abbrev sml-mode-abbrev-table ,name "" ',fsym)))
 	 (define-skeleton ,fsym
 	   ,(format "SML-mode skeleton for `%s..' expressions" name)
 	   ,interactor
@@ -733,10 +910,7 @@ signature, structure, and functor by default.")
 ;;
 
 (defun sml-forms-menu (menu)
-  (mapcar (lambda (x)
-	    (let ((name (car x))
-		  (fsym (cdr x)))
-	      (vector name fsym t)))
+  (mapcar (lambda (x) (vector (car x) (cdr x) t))
 	  sml-forms-alist))
 
 (defvar sml-last-form "let")
@@ -771,7 +945,7 @@ completion from `sml-forms-alist'."
   (unless (or (not newline)
 	      (save-excursion (beginning-of-line) (looking-at "\\s-*$")))
     (insert "\n"))
-  (unless (/= ?w (char-syntax (char-before))) (insert " "))
+  (unless (/= ?w (char-syntax (preceding-char))) (insert " "))
   (let ((f (cdr (assoc name sml-forms-alist))))
     (cond
      ((commandp f) (command-execute f))
@@ -811,6 +985,7 @@ See also `edit-kbd-macro' which is bound to \\[edit-kbd-macro]."
 	    "\\>")))
 ;;;###autoload
 (add-to-list 'completion-ignored-extensions "CM/")
+(add-to-list 'completion-ignored-extensions ".cm/")
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.cm\\'" . sml-cm-mode))
 ;;;###autoload

@@ -1,15 +1,11 @@
 #!/usr/bin/make -f
 
 PACKAGE=sml-mode
-SITE=ftp://ftp.research.bell-labs.com/dist/smlnj/contrib/emacs
-MAJOR=3
-MINOR=9
-MINI=5
 
 include /usr/share/dpatch/dpatch.make
 
 get-orig-source:
-	wget $(SITE)/$(PACKAGE)-$(MAJOR).$(MINOR).$(MINI).tar.gz
+	wget http://www-perso.iro.umontreal.ca/~monnier/elisp/sml-mode-4.0.tar.gz
 
 build: build-stamp
 
@@ -53,4 +49,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install get-orig-source
+.PHONY: build clean clean-patched binary-indep binary-arch binary install get-orig-source

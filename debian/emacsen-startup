@@ -1,8 +1,19 @@
 ;; -*-emacs-lisp-*-
-(setq load-path (cons (concat "/usr/share/"
-                              (symbol-name flavor)
-                              "/site-lisp/sml-mode") load-path))
-;; Autoload sml-mode top-level functions site-wide.
-(load "sml-mode-startup")
 
+(if (not (file-exists-p "/usr/share/emacs/site-lisp/sml-mode"))
+    (message "Package sml-mode removed but not purged.  Skipping setup.")
 
+  ;; The sml-mode package follows the Debian/GNU Linux 'emacsen' policy
+  ;; and byte-compiles its elisp files for each 'emacs flavor'.  The compiled
+  ;; code is then installed in a subdirectory of the respective site-lisp
+  ;; directory.
+  (debian-pkg-add-load-path-item
+   (concat 
+    "/usr/share/" (symbol-name debian-emacs-flavor) "/site-lisp/sml-mode"))
+
+  ;; Make sure that Help can find the source code.  Has to be at the end.
+  (setq load-path
+      (nconc load-path (list "/usr/share/emacs/site-lisp/sml-mode")))
+  
+  ;; Autoload sml-mode top-level functions site-wide.
+  (load "sml-mode-startup"))

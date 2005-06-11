@@ -1,3 +1,13 @@
+sml-mode (4.0-4) unstable; urgency=low
+
+  * Fixed end/beginning-of-buffer problem in
+    sml-find-match-forward/backward function. (closes: bug#279348)
+  * Make sure that Emacs Help can find the source code by including the
+    location in load-path (instead of byte-code location, which is now
+    set up in upstream sml-mode-startup).
+
+ -- Jens Peter Secher <jps@debian.org>  Sun, 12 Jun 2005 01:23:52 +0200
+
 sml-mode (4.0-3) experimental; urgency=low
 
   * Fixed the automatic pacthing of bug#286190.

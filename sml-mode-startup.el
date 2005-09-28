@@ -1,6 +1,6 @@
 
 ;;;### (autoloads (sml-yacc-mode sml-lex-mode sml-cm-mode sml-mode)
-;;;;;;  "sml-mode" "sml-mode.el" (17067 29764))
+;;;;;;  "sml-mode" "sml-mode.el" (17210 22449))
 ;;; Generated autoloads from sml-mode.el
  (add-to-list 'load-path (file-name-directory load-file-name))
 

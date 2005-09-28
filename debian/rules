@@ -31,7 +31,7 @@ install: build
 	$(MAKE) prefix=$(CURDIR)/debian/$(PACKAGE)/usr install
 	rm -f $(CURDIR)/debian/$(PACKAGE)/usr/share/emacs/site-lisp/sml-mode/*.elc
 
-binary-indep: build install
+binary-indep: install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs

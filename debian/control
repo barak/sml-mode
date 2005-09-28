@@ -2,8 +2,9 @@ Source: sml-mode
 Section: editors
 Priority: optional
 Maintainer: Jens Peter Secher <jps@debian.org>
-Build-Depends: debhelper (>= 4), dpatch, texinfo, emacs21 | emacsen
-Standards-Version: 3.6.1
+Build-Depends-Indep: texinfo, emacs21 | emacsen
+Build-Depends: debhelper (>= 4), dpatch
+Standards-Version: 3.6.2
 
 Package: sml-mode
 Architecture: all

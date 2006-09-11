@@ -1,8 +1,5 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 50_find_match_stop_at_end_or_beginning_of_buffer.dpatch by  <jps@tarjan.83.73.6.130.ip.tele2adsl.dk>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## 50_find_match_stop_at_end_or_beginning_of_buffer.dpatch by Jens Peter Secher <jps@debian.org>
 
 @DPATCH@
 diff -urNad sml-mode-4.0/sml-move.el /tmp/dpep.mynKKi/sml-mode-4.0/sml-move.el

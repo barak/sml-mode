@@ -1,3 +1,4 @@
 25_install_into_datadir
 50_check_for_charsetp
 50_find_match_stop_at_end_or_beginning_of_buffer
+50_polyml_error_pattern

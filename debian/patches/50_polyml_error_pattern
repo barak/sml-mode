@@ -1,0 +1,18 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 50_polyml_error_pattern.dpatch by Jens Peter Secher <jps@debian.org>
+##
+## DP: Fix wrong Poly/ML error pattern.
+
+@DPATCH@
+diff -urNad sml-mode-4.0~/sml-proc.el sml-mode-4.0/sml-proc.el
+--- sml-mode-4.0~/sml-proc.el	2004-11-15 04:51:19.000000000 +0100
++++ sml-mode-4.0/sml-proc.el	2006-09-11 21:47:14.000000000 +0200
+@@ -208,7 +208,7 @@
+ 
+ (defvar sml-error-regexp-alist
+   `( ;; Poly/ML messages
+-    ("^\\(Error\\|Warning:\\) in '\\(.+\\)', line \\([0-9]+\\)" 2 3)
++    ("^\\(Error:\\|Warning:\\) in '\\(.+\\)', line \\([0-9]+\\)" 2 3)
+     ;; Moscow ML
+     ("^File \"\\([^\"]+\\)\", line \\([0-9]+\\)\\(-\\([0-9]+\\)\\)?, characters \\([0-9]+\\)-\\([0-9]+\\):" 1 2 5)
+     ;; SML/NJ:  the file-pattern is anchored to avoid

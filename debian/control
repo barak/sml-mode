@@ -3,8 +3,8 @@ Section: editors
 Priority: optional
 Maintainer: Jens Peter Secher <jps@debian.org>
 Build-Depends-Indep: texinfo, emacs21 | emacsen
-Build-Depends: debhelper (>= 4), dpatch
-Standards-Version: 3.6.2
+Build-Depends: debhelper (>= 5), dpatch
+Standards-Version: 3.7.2
 
 Package: sml-mode
 Architecture: all

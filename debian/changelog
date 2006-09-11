@@ -1,3 +1,12 @@
+sml-mode (4.0-6) unstable; urgency=low
+
+  * Fixed wrong Poly/ML error pattern, thanks to Ian Zimmerman.
+    (Closes: bug#386364)
+  * Fixed missing names in copyright file.
+  * Bump Standards-Version to 3.7.2.
+
+ -- Jens Peter Secher <jps@debian.org>  Mon, 11 Sep 2006 21:18:12 +0200
+
 sml-mode (4.0-5) unstable; urgency=low
 
   * Update FSF address in copyright file.

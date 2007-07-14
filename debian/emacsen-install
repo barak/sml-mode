@@ -1,8 +1,6 @@
 #! /bin/sh -e
 # /usr/lib/emacsen-common/packages/install/sml-mode
-# Written by Jim Van Zandt <jrv@vanzandt.mv.com>, borrowing heavily
-# from the install scripts for gettext by Santiago Vila
-# <sanvila@ctv.es> and octave by Dirk Eddelbuettel <edd@debian.org>.
+# With thanks to Dirk Eddelbuettel, Michael Olson, Santiago Vila, Jim Van Zandt.
 FLAVOR=$1
 PACKAGE=sml-mode
 if [ ${FLAVOR} = emacs ]; then exit 0; fi
@@ -19,11 +17,11 @@ fi
 install -m 755 -d ${ELCDIR}
 cd ${ELDIR}
 FILES=`echo *.el`
-cp ${FILES} ${ELCDIR}
 cd ${ELCDIR}
+ln -sf ${ELDIR}/*.el .
 cat << EOF > path.el
 (setq load-path (cons "." load-path) byte-compile-warnings nil)
 EOF
 ${FLAVOR} ${FLAGS} ${FILES}
-rm -f *.el path.el
+rm -f path.el
 exit 0

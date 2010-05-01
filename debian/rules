@@ -2,33 +2,29 @@
 
 PACKAGE=sml-mode
 
-include /usr/share/dpatch/dpatch.make
-
 get-orig-source:
 	wget http://www-perso.iro.umontreal.ca/~monnier/elisp/sml-mode-4.0.tar.gz
 
-build: build-stamp
-
-build-stamp: patch-stamp
-	dh_testdir
-	$(MAKE)
-	touch build-stamp
-
-clean: clean-patched unpatch
-
-clean-patched:
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
 	$(MAKE) distclean
 	dh_clean
 
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	$(MAKE)
+	touch $@
+
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_installdirs
-	$(MAKE) prefix=$(CURDIR)/debian/$(PACKAGE)/usr install
+	$(MAKE) install prefix=$(CURDIR)/debian/$(PACKAGE)/usr
 	rm -f $(CURDIR)/debian/$(PACKAGE)/usr/share/emacs/site-lisp/sml-mode/*.elc
 
 binary-indep: install
@@ -49,4 +45,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean clean-patched binary-indep binary-arch binary install get-orig-source
+.PHONY: build clean binary-indep binary-arch binary install get-orig-source

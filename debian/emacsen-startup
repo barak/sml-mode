@@ -3,13 +3,19 @@
 (if (not (file-exists-p "/usr/share/emacs/site-lisp/sml-mode"))
     (message "Package sml-mode removed but not purged.  Skipping setup.")
 
-  ;; The sml-mode package follows the Debian/GNU Linux 'emacsen' policy
-  ;; and byte-compiles its elisp files for each 'emacs flavor'.  The compiled
-  ;; code is then installed in a subdirectory of the respective site-lisp
-  ;; directory.
-  (debian-pkg-add-load-path-item
-   (concat 
-    "/usr/share/" (symbol-name debian-emacs-flavor) "/site-lisp/sml-mode"))
+  (let ((smldir (concat "/usr/share/"
+                        (symbol-name debian-emacs-flavor)
+                        "/site-lisp/sml-mode")))
 
-  ;; Autoload sml-mode top-level functions site-wide.
-  (load "sml-mode-startup"))
+    ;; Only load sml-mode if it has been installed.
+    (if (zerop (length (file-expand-wildcards smldir)))
+        (message "sml-mode not for this flavor.  Skipping.")
+
+      ;; The sml-mode package follows the Debian/GNU Linux 'emacsen' policy and
+      ;; byte-compiles its elisp files for each 'emacs flavor'.  The compiled
+      ;; code is then installed in a subdirectory of the respective site-lisp
+      ;; directory.
+      (debian-pkg-add-load-path-item smldir)
+
+      ;; Autoload sml-mode top-level functions site-wide.
+      (load "sml-mode-startup"))))

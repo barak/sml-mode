@@ -1,0 +1,4 @@
+install_into_datadir.diff
+check_for_charsetp.diff
+find_match_stop_at_end_or_beginning_of_buffer.diff
+polyml_error_pattern.diff

@@ -1,0 +1,27 @@
+Description: Install into datadir
+Author: Jens Peter Secher <jps@debian.org>
+
+Index: sml-mode/Makefile
+===================================================================
+--- sml-mode.orig/Makefile	2010-05-01 23:51:37.000000000 +0200
++++ sml-mode/Makefile	2010-05-02 00:26:49.000000000 +0200
+@@ -41,8 +41,8 @@
+ elibdir = $(lispdir)/elib
+ 
+ # the directory where you install the info doc
+-infodir = $(prefix)/info
+-docdir = $(prefix)/doc
++infodir = $(datadir)/info
++docdir = $(datadir)/doc
+ 
+ EMACS	= emacs
+ MAKEINFO= makeinfo
+@@ -130,7 +130,7 @@
+ 	$(MKDIR) $(docdir)
+ 	$(CP) `find . -type f -name '*.dvi' -print` $(docdir)/
+ 
+-install: install_elc install_info install_startup install_el
++install: install_elc install_info install_el
+ 
+ clean:
+ 	$(RM) *~ core .\#* $(TEXEXTS)

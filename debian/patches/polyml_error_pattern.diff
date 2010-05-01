@@ -1,12 +1,10 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 50_polyml_error_pattern.dpatch by Jens Peter Secher <jps@debian.org>
-##
-## DP: Fix wrong Poly/ML error pattern.
+Description: Support PolyML.
+Author: Jens Peter Secher <jps@debian.org>
 
-@DPATCH@
-diff -urNad sml-mode-4.0~/sml-proc.el sml-mode-4.0/sml-proc.el
---- sml-mode-4.0~/sml-proc.el	2004-11-15 04:51:19.000000000 +0100
-+++ sml-mode-4.0/sml-proc.el	2006-09-11 21:47:14.000000000 +0200
+Index: sml-mode/sml-proc.el
+===================================================================
+--- sml-mode.orig/sml-proc.el	2010-05-01 23:51:37.000000000 +0200
++++ sml-mode/sml-proc.el	2010-05-02 00:27:18.000000000 +0200
 @@ -208,7 +208,7 @@
  
  (defvar sml-error-regexp-alist

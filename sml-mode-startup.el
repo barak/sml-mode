@@ -1,6 +1,6 @@
 
 ;;;### (autoloads (sml-yacc-mode sml-lex-mode sml-cm-mode sml-mode)
-;;;;;;  "sml-mode" "sml-mode.el" (18072 32994))
+;;;;;;  "sml-mode" "sml-mode.el" (16802 50967))
 ;;; Generated autoloads from sml-mode.el
  (add-to-list 'load-path (file-name-directory load-file-name))
 
@@ -36,7 +36,7 @@ Major Mode for editing ML-Yacc files.
 
 ;;;***
 
-;;;### (autoloads nil "sml-proc" "sml-proc.el" (18072 32994))
+;;;### (autoloads nil "sml-proc" "sml-proc.el" (16792 10167))
 ;;; Generated autoloads from sml-proc.el
 
 (autoload (quote run-sml) "sml-proc" nil t)
@@ -44,7 +44,7 @@ Major Mode for editing ML-Yacc files.
 ;;;***
 
 ;;;### (autoloads nil nil ("sml-compat.el" "sml-defs.el" "sml-move.el"
-;;;;;;  "sml-util.el") (18072 32997 90020))
+;;;;;;  "sml-util.el") (16804 59485 627001))
 
 ;;;***
 

@@ -3,12 +3,14 @@ Section: editors
 Priority: optional
 Maintainer: Jens Peter Secher <jps@debian.org>
 Build-Depends-Indep: texinfo, emacs23 | emacsen
-Build-Depends: debhelper (>= 5), dpatch
-Standards-Version: 3.7.2
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.4
+Homepage: http://www.iro.umontreal.ca/~monnier/elisp
+Vcs-Hg: http://hg.debian.org/hg/collab-maint/sml-mode
 
 Package: sml-mode
 Architecture: all
-Depends: emacs23 | emacsen
+Depends: emacsen-common, dpkg (>= 1.15.4) | install-info, ${misc:Depends}
 Enhances: sml-nj, mlton, mosml
 Description: a major Emacs mode for editing Standard ML
  This Emacs mode provides syntax highlighting and automatic

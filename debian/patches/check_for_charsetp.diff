@@ -3,8 +3,8 @@ Author: Jens Peter Secher <jps@debian.org>
 
 Index: sml-mode/sml-mode.el
 ===================================================================
---- sml-mode.orig/sml-mode.el	2010-05-01 23:51:37.000000000 +0200
-+++ sml-mode/sml-mode.el	2010-05-02 00:27:08.000000000 +0200
+--- sml-mode.orig/sml-mode.el	2010-09-11 15:27:15.000000000 +0200
++++ sml-mode/sml-mode.el	2010-09-11 15:33:31.000000000 +0200
 @@ -188,7 +188,7 @@
  (defconst sml-font-lock-symbols-alist
    (append

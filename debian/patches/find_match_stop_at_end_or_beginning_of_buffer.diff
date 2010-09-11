@@ -3,8 +3,8 @@ Author: Jens Peter Secher <jps@debian.org>
 
 Index: sml-mode/sml-move.el
 ===================================================================
---- sml-mode.orig/sml-move.el	2010-05-01 23:51:37.000000000 +0200
-+++ sml-mode/sml-move.el	2010-05-02 00:27:14.000000000 +0200
+--- sml-mode.orig/sml-move.el	2010-09-11 15:27:15.000000000 +0200
++++ sml-mode/sml-move.el	2010-09-11 15:33:35.000000000 +0200
 @@ -135,6 +135,7 @@
  	(condition-case () (forward-sexp 1) (error (forward-char 1))))
        (setq level

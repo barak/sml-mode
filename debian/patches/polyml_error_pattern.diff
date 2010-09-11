@@ -3,8 +3,8 @@ Author: Jens Peter Secher <jps@debian.org>
 
 Index: sml-mode/sml-proc.el
 ===================================================================
---- sml-mode.orig/sml-proc.el	2010-05-01 23:51:37.000000000 +0200
-+++ sml-mode/sml-proc.el	2010-05-02 00:27:18.000000000 +0200
+--- sml-mode.orig/sml-proc.el	2010-09-11 15:27:15.000000000 +0200
++++ sml-mode/sml-proc.el	2010-09-11 15:33:44.000000000 +0200
 @@ -208,7 +208,7 @@
  
  (defvar sml-error-regexp-alist

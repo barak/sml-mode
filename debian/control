@@ -2,13 +2,13 @@ Source: sml-mode
 Section: editors
 Priority: optional
 Maintainer: Jens Peter Secher <jps@debian.org>
-Build-Depends-Indep: texinfo, emacs22 | emacs21 | emacsen
+Build-Depends-Indep: texinfo, emacs23 | emacsen
 Build-Depends: debhelper (>= 5), dpatch
 Standards-Version: 3.7.2
 
 Package: sml-mode
 Architecture: all
-Depends: emacs22 | emacs21 | emacsen
+Depends: emacs23 | emacsen
 Enhances: sml-nj, mlton, mosml
 Description: a major Emacs mode for editing Standard ML
  This Emacs mode provides syntax highlighting and automatic

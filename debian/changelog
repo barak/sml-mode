@@ -1,3 +1,10 @@
+sml-mode (4.1-2) unstable; urgency=low
+
+  * Bumped Standards-Version to 3.9.1, no change.
+  * Compile to unstable, cleanup of patches.
+
+ -- Jens Peter Secher <jps@debian.org>  Sat, 16 Apr 2011 17:20:44 +0200
+
 sml-mode (4.1-1) experimental; urgency=low
 
   * New upstream version.

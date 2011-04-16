@@ -4,16 +4,17 @@ Priority: optional
 Maintainer: Jens Peter Secher <jps@debian.org>
 Build-Depends-Indep: texinfo, emacs23 | emacsen
 Build-Depends: debhelper (>= 7)
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 Homepage: http://www.iro.umontreal.ca/~monnier/elisp
 Vcs-Hg: http://hg.debian.org/hg/collab-maint/sml-mode
 
 Package: sml-mode
 Architecture: all
 Depends: emacsen-common, dpkg (>= 1.15.4) | install-info, ${misc:Depends}
-Enhances: sml-nj, mlton, mosml
-Description: a major Emacs mode for editing Standard ML
- This Emacs mode provides syntax highlighting and automatic
+Enhances: mlton, mosml
+Description: Emacs major mode for editing Standard ML programs
+ SML-mode provides syntax highlighting and automatic
  indentation for Standard ML and comes with sml-proc which allows
  interaction with an inferior SML interactive loop.  You will need
- this if you write Standard ML programs using Emacs.
+ this if you write Standard ML programs using Emacs.  For OCaml
+ prgramming, see instead tuareg-mode.

@@ -1,11 +1,11 @@
 Description: Check for existence of charsetp before using it.
 Author: Jens Peter Secher <jps@debian.org>
 
-Index: sml-mode/sml-mode.el
+Index: sml-mode-5.0/sml-mode.el
 ===================================================================
---- sml-mode.orig/sml-mode.el	2010-09-11 15:27:15.000000000 +0200
-+++ sml-mode/sml-mode.el	2010-09-11 15:33:31.000000000 +0200
-@@ -188,7 +188,7 @@
+--- sml-mode-5.0.orig/sml-mode.el	2013-07-17 19:08:14.079293412 -0400
++++ sml-mode-5.0/sml-mode.el	2013-07-17 19:08:14.075293392 -0400
+@@ -333,7 +333,7 @@
  (defconst sml-font-lock-symbols-alist
    (append
     ;; The symbols can come from a JIS0208 font.

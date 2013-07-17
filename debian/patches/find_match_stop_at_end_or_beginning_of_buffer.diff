@@ -1,11 +1,11 @@
 Description: Find match stop at end or beginning of buffer
 Author: Jens Peter Secher <jps@debian.org>
 
-Index: sml-mode/sml-move.el
+Index: sml-mode-5.0/sml-oldindent.el
 ===================================================================
---- sml-mode.orig/sml-move.el	2010-09-11 15:27:15.000000000 +0200
-+++ sml-mode/sml-move.el	2010-09-11 15:33:35.000000000 +0200
-@@ -135,6 +135,7 @@
+--- sml-mode-5.0.orig/sml-oldindent.el	2013-07-17 19:12:04.532436167 -0400
++++ sml-mode-5.0/sml-oldindent.el	2013-07-17 19:12:04.528436147 -0400
+@@ -229,6 +229,7 @@
  	(condition-case () (forward-sexp 1) (error (forward-char 1))))
        (setq level
  	    (cond
@@ -13,7 +13,7 @@ Index: sml-mode/sml-move.el
  	     ((sml-looking-back-at this) (1+ level))
  	     ((sml-looking-back-at match) (1- level))
  	     (t (error "Unbalanced")))))
-@@ -150,6 +151,7 @@
+@@ -244,6 +245,7 @@
  	(condition-case () (backward-sexp 1) (error (backward-char 1))))
        (setq level
  	    (cond

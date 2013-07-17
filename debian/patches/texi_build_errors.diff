@@ -1,0 +1,18 @@
+Description: Fix errors when generating info file.
+Bug-Debian: http://bugs.debian.org/712352
+Author: Barry deFreese <bdefreese@debian.org>
+Index: sml-mode-5.0/sml-mode.texi
+===================================================================
+--- sml-mode-5.0.orig/sml-mode.texi	2012-04-11 20:20:36.000000000 -0400
++++ sml-mode-5.0/sml-mode.texi	2013-07-17 19:39:54.408716636 -0400
+@@ -34,8 +34,8 @@
+ @center @titlefont{Editing and Running Standard ML}
+ @center @titlefont{under GNU Emacs}
+ @sp 5
+-@center {SML mode, Version $Name$}
+-@center {August 1999}
++@center SML mode, Version $Name$
++@center August 1999
+ @sp 2
+ @author Authors: Matthew J.@: Morley and Stefan Monnier
+ 

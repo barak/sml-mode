@@ -1,3 +1,21 @@
+sml-mode (5.0-1) unstable; urgency=low
+
+  * QA upload.
+  * Set maintainer to Debian QA Group <packages@qa.debian.org>.
+  * New upstream release.
+    + Refresh existing patches.
+    + find_match_stop_at_end_or_beginning_of_buffer.diff - 
+      Update to patch sml-oldindent.el instead of sml-move.el.
+    + sml-compat.el removed and so are old defvars. (Closes: #681922, #710746).
+  * Add texi_build_errors patch to fix texi errors. (Closes: #712352).
+  * Bump emacs build-dep to emacs24 | emacsen.
+  * Make VCS tag canonical.
+  * Bump debhelper build-dep and compat to 9.
+    + Update rules to simple dh style.
+  * Bump Standards Version to 3.9.4.
+
+ -- Barry deFreese <bdefreese@debian.org>  Wed, 17 Jul 2013 19:01:03 -0400
+
 sml-mode (4.1-2) unstable; urgency=low
 
   * Bumped Standards-Version to 3.9.1, no change.

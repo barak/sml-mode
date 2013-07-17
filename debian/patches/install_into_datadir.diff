@@ -1,10 +1,10 @@
 Description: Install into datadir
 Author: Jens Peter Secher <jps@debian.org>
 
-Index: sml-mode/Makefile
+Index: sml-mode-5.0/Makefile
 ===================================================================
---- sml-mode.orig/Makefile	2010-09-11 15:27:15.000000000 +0200
-+++ sml-mode/Makefile	2010-09-11 15:33:21.000000000 +0200
+--- sml-mode-5.0.orig/Makefile	2013-07-17 19:05:25.278456373 -0400
++++ sml-mode-5.0/Makefile	2013-07-17 19:05:25.278456373 -0400
 @@ -41,8 +41,8 @@
  elibdir = $(lispdir)/elib
  

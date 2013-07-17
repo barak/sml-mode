@@ -1,11 +1,11 @@
 Description: Support PolyML.
 Author: Jens Peter Secher <jps@debian.org>
 
-Index: sml-mode/sml-proc.el
+Index: sml-mode-5.0/sml-proc.el
 ===================================================================
---- sml-mode.orig/sml-proc.el	2010-09-11 15:27:15.000000000 +0200
-+++ sml-mode/sml-proc.el	2010-09-11 15:33:44.000000000 +0200
-@@ -208,7 +208,7 @@
+--- sml-mode-5.0.orig/sml-proc.el	2013-07-17 19:15:53.209570116 -0400
++++ sml-mode-5.0/sml-proc.el	2013-07-17 19:15:53.205570096 -0400
+@@ -199,7 +199,7 @@
  
  (defvar sml-error-regexp-alist
    `( ;; Poly/ML messages

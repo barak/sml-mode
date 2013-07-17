@@ -1,12 +1,12 @@
 Source: sml-mode
 Section: editors
 Priority: optional
-Maintainer: Jens Peter Secher <jps@debian.org>
-Build-Depends-Indep: texinfo, emacs23 | emacsen
-Build-Depends: debhelper (>= 7)
-Standards-Version: 3.9.1
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Build-Depends-Indep: texinfo, emacs24 | emacsen
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.4
 Homepage: http://www.iro.umontreal.ca/~monnier/elisp
-Vcs-Hg: http://hg.debian.org/hg/collab-maint/sml-mode
+Vcs-Hg: http://anonscm.debian.org/hg/collab-maint/sml-mode
 
 Package: sml-mode
 Architecture: all

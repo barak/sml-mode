@@ -120,7 +120,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl-lib))
-(require 'smie nil 'noerror)
+(condition-case nil (require 'smie)     (error nil))
 (require 'electric)
 
 (defgroup sml ()

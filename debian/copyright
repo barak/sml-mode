@@ -4,6 +4,8 @@ Wed, 12 Sep 2001 15:14:01 +0200.
 It was downloaded from 
 http://www.iro.umontreal.ca/~monnier/elisp/sml-mode-4.0.tar.gz
 
+Upstream tracked from: https://github.com/emacsmirror/sml-mode
+
 Upstream Author: Stefan Monnier <monnier+lists/emacs/sml@tequila.cs.yale.edu>
 
 Copyright:

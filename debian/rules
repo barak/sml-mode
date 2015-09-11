@@ -3,14 +3,12 @@
 %:
 	dh $@
 
-override_dh_auto_test:
+sml-mode.info: sml-mode.texi
+	texi2any $<
 
-override_dh_auto_install:
-	dh_auto_install -- prefix=$(CURDIR)/debian/sml-mode/usr
+override_dh_installinfo: sml-mode.info
+	dh_installinfo
 
 override_dh_install:
-	rm -f $(CURDIR)/debian/sml-mode/usr/share/emacs/site-lisp/sml-mode/*.elc
 	dh_install
-
-get-orig-source:
-	wget http://www-perso.iro.umontreal.ca/~monnier/elisp/sml-mode-4.0.tar.gz
+	dh_elpa -pelpa-sml-mode

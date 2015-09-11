@@ -1,4 +1,4 @@
-(* Copyright 1999,2004,2007,2010-2012 Stefan Monnier <monnier@gnu.org> *)
+(* Copyright 1999,2004,2007,2010-2012,2014 Stefan Monnier <monnier@gnu.org> *)
 
 (* sml-mode here treats the second `=' as an equal op because it
  * thinks it's seeing something like "... type t = (s.t = ...)".  FIXME!  *)
@@ -54,6 +54,53 @@ val bar =
              else
                  c
           ;4)
+
+structure Attrs : sig
+            type t
+            datatype node
+              = Attributes of string list
+            include WRAPPED
+            sharing type node' = node
+            sharing type obj = t
+          end
+
+functor DoWrap1(type node) : S = struct
+type t = node Wrap.t
+open Wrap
+type node' = node
+type obj = t
+end
+
+datatype exp_node
+  = Let of varpat_t list * rhs_t * exp_t
+  | Do of simpleexp_t * exp_t
+  | FunExp of fundef_t list * exp_t
+  | ContExp of BomId.t * varpat_t list option * exp_t * exp_t
+  | If of simpleexp_t * exp_t * exp_t
+  | Case of simpleexp_t * caserule_t list
+  | Typecase of TyParam.t * tycaserule_t list
+  | Apply of LongValueId.t * simpleexp_t list option * simpleexp_t list option
+  | Throw of BomId.t * tyargs_t option * simpleexp_t list option
+  | Return of simpleexp_t list option
+and rhs_node
+    = Composite of exp_t
+    | Simple of simpleexp_t
+
+withtype type_t = type_node Wrap.t
+     and tyargs_t = tyargs_node Wrap.t
+
+functor DoWrap(type node) : sig
+          type t = node Wrap.t
+          include WRAPPED
+          sharing type node' = node
+          sharing type obj = t
+        end =
+struct
+type t = node Wrap.t
+open Wrap
+type node' = node
+type obj = t
+end
 
 val ber = 1;
 val sdfg = 1
@@ -113,6 +160,7 @@ val x =
 datatype foobar
   = FooB of int
   | FooA of bool * int
+and baz = QUX of foo
 datatype foo = FOO | BAR of baz
      and baz = BAZ | QUUX of foo
 
@@ -332,8 +380,8 @@ fun sexp env lexp =			(* fixindent *)
     let
 	(* non-side effecting binds are copied to leI if exported *)
 	fun let1 (le,lewrap,lv,vs,effect) =
-	    let val (leE,leI,fvI,leRet) = sexp (S.add(env, lv)) le
-		val leE = lewrap o leE
+	    let  val (leE,leI,fvI,leRet) = sexp (S.add(env, lv)) le
+		 val leE = lewrap o leE
 	    in if effect orelse not (S.member(fvI, lv))
 	       then (leE, leI, fvI, leRet)
 	       else (leE, lewrap leI, addvs(S_rmv(lv, fvI), vs), leRet)
@@ -430,8 +478,8 @@ and sfdec env (leE,leI,fvI,leRet) (fk,f,args,body) =
 	       val fErets = (map F.VAR fvbIs)
 	       val bodyE = bodyE(F.RET fErets)
 	       (* val tmp = mklv()
-		  val bodyE = bodyE(F.RECORD(F.RK_STRUCT, map F.VAR fvbIs,
-					     tmp, F.RET[F.VAR tmp])) *)
+		val bodyE = bodyE(F.RECORD(F.RK_STRUCT, map F.VAR fvbIs,
+					   tmp, F.RET[F.VAR tmp])) *)
 	       val fdecE = (fkE, fE, args, bodyE)
 	       val fElty = LT.ltc_fct(map #2 args, map getLty fErets)
 	       val _ = addLty(fE, fElty)
@@ -538,7 +586,7 @@ in case (bodyI, bodyRet)
 	   val argLtys = (map getLty vs) @ (map (getLty o F.VAR) fvbIs)
 	   val argsI = [(argI, LT.ltc_str argLtys)]
 	   val (_,bodyI) = foldl (fn (lv,(n,le)) =>
-				  (n+1, F.SELECT(F.VAR argI, n, lv, le)))
+				     (n+1, F.SELECT(F.VAR argI, n, lv, le)))
 				 (length vs, bodyI) fvbIs
 	   val fdecI as (_,fI,_,_) = FU.copyfdec (fk, f, argsI, bodyI)
 

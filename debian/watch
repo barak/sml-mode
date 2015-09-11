@@ -1,2 +1,2 @@
-version=2
-http://www-perso.iro.umontreal.ca/~monnier/elisp/sml-mode-(.*)\.tar\.gz debian uupdate
+version=3
+https://elpa.gnu.org/packages/sml-mode.html sml-mode-(.*)\.el

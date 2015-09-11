@@ -1,3 +1,18 @@
+sml-mode (6.7-1) unstable; urgency=medium
+
+  * new maintainer adopting this poor orphaned package!
+  * newer upstream release
+    - ancient inferior sml issues seem fixed (closes: #274266)
+    - take upstream from git repo instead of tarball
+    - work around xemacs21 three-arg requires issue by applying and
+      forward-porting patch from bug report (closes: #732996)
+    - file-expand-wildcards no longer used (closes: 663406)
+    - expand-region-el can stop disabling sml-mode support
+  * dh_elpa-fy
+  * patch to address safe local variable annoyance (closes: 717440)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 15 Sep 2015 09:03:27 +0100
+
 sml-mode (5.0-1) unstable; urgency=low
 
   * QA upload.

@@ -1,6 +1,6 @@
 ;;; sml-compat.el --- Compatibility functions for Emacs variants for sml-mode
 
-;; Copyright (C) 1999-2000  Stefan Monnier <monnier@cs.yale.edu>
+;; Copyright (C) 1999, 2000, 2004  Stefan Monnier <monnier@gnu.org>
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 ;;; Code:
 
+(require 'cl)
+
 (unless (fboundp 'set-keymap-parents)
   (defun set-keymap-parents (m parents)
     (if (keymapp parents) (setq parents (list parents)))
@@ -34,7 +36,7 @@
        (car parents)))))
 
 ;; for XEmacs
-(when (and (not (boundp 'temporary-file-directory)) (fboundp 'temp-directory))
+(when (fboundp 'temp-directory)
   (defvar temporary-file-directory (temp-directory)))
 
 (unless (fboundp 'make-temp-file)
@@ -55,7 +57,7 @@ If DIR-FLAG is non-nil, create a new empty directory instead of a file."
 			(expand-file-name prefix temporary-file-directory)))
 		 (if dir-flag
 		     (make-directory file)
-		   (write-region "" nil file nil 'silent nil 'excl))
+		   (write-region "" nil file nil 'silent))
 		 nil)
 	    (file-already-exists t))
       ;; the file was somehow created by someone else between
@@ -63,6 +65,42 @@ If DIR-FLAG is non-nil, create a new empty directory instead of a file."
       nil)
     file)))
 
+
+
+(unless (fboundp 'regexp-opt)
+  (defun regexp-opt (strings &optional paren)
+    (let ((open (if paren "\\(" "")) (close (if paren "\\)" "")))
+      (concat open (mapconcat 'regexp-quote strings "\\|") close))))
+
+
+;;;; 
+;;;; Custom
+;;;; 
+
+;; doesn't exist in Emacs < 20.1
+(unless (fboundp 'set-face-bold-p)
+  (defun set-face-bold-p (face v &optional f)
+    (when v (ignore-errors (make-face-bold face)))))
+(unless (fboundp 'set-face-italic-p)
+  (defun set-face-italic-p (face v &optional f)
+    (when v (ignore-errors (make-face-italic face)))))
+
+;; doesn't exist in Emacs < 20.1
+(ignore-errors (require 'custom))
+(unless (fboundp 'defgroup)
+  (defmacro defgroup (&rest rest) ()))
+(unless (fboundp 'defcustom)
+  (defmacro defcustom (sym val str &rest rest) `(defvar ,sym ,val ,str)))
+(unless (fboundp 'defface)
+  (defmacro defface (sym val str &rest rest)
+    `(defvar ,sym (make-face ',sym) ,str)))
+
+(defvar :group ':group)
+(defvar :type ':type)
+(defvar :copy ':copy)
+(defvar :dense ':dense)
+(defvar :inherit ':inherit)
+(defvar :suppress ':suppress)
 
 (provide 'sml-compat)
 

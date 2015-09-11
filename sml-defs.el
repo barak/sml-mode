@@ -1,6 +1,6 @@
 ;;; sml-defs.el --- Various definitions for sml-mode
 
-;; Copyright (C) 1999-2000  Stefan Monnier <monnier@cs.yale.edu>
+;; Copyright (C) 1999,2000,2003  Stefan Monnier <monnier@cs.yale.edu>
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -74,19 +74,18 @@ notion of \"the end of an outline\".")
   "The syntax table used in `sml-mode'.")
 
 
-(easy-menu-define sml-mode-menu sml-mode-map "Menu used in sml-mode."
+(easy-menu-define sml-mode-menu sml-mode-map "Menu used in `sml-mode'."
   '("SML"
     ("Process"
-     ["Start default ML compiler" sml		(fboundp 'sml)]
+     ["Start default ML compiler" run-sml		t]
      ["-" nil nil]
-     ["run CM.make"		sml-make	(featurep 'sml-proc)]
-     ["load ML source file"	sml-load-file	(featurep 'sml-proc)]
-     ["switch to ML buffer"	switch-to-sml	(featurep 'sml-proc)]
+     ["run CM.make"		sml-compile	t]
+     ["load ML source file"	sml-load-file	t]
+     ["switch to ML buffer"	switch-to-sml	t]
      ["--" nil nil]
-     ["send buffer contents"	sml-send-buffer	(featurep 'sml-proc)]
-     ["send region"		sml-send-region	(featurep 'sml-proc)]
-     ["send paragraph"		sml-send-function (featurep 'sml-proc)]
-     ;;["goto next error"		sml-next-error	(featurep 'sml-proc)]
+     ["send buffer contents"	sml-send-buffer	t]
+     ["send region"		sml-send-region	t]
+     ["send paragraph"		sml-send-function t]
      ["goto next error"		next-error	(featurep 'sml-proc)]
      ["---" nil nil]
      ;; ["Standard ML of New Jersey" sml-smlnj	(fboundp 'sml-smlnj)]
@@ -97,7 +96,7 @@ notion of \"the end of an outline\".")
     ["insert SML form"   sml-insert-form t]
     ("Forms" :filter sml-forms-menu)
     ("Format/Mode Variables"
-     ["indent region"             sml-indent-region t]
+     ["indent region"             indent-region t]
      ["outdent"                   sml-back-to-outer-indent t]
      ["-" nil nil]
      ["set indent-level"          sml-indent-level t]
@@ -111,10 +110,10 @@ notion of \"the end of an outline\".")
     ["SML mode help (brief)"       describe-mode t]
     ["SML mode *info*"             sml-mode-info t]
     ["-----" nil nil]
-    ["Remove overlay"    (sml-error-overlay 'undo) ;:active (sml-overlay-active-p)
+    ["Remove overlay"    (sml-error-overlay 'undo) t ;:active (sml-overlay-active-p)
      ]))
 
-;;; Make's sure they appear in the menu bar when sml-mode-map is active.
+;; Make's sure they appear in the menu bar when sml-mode-map is active.
 ;; On the hook for XEmacs only -- see easy-menu-add in auc-menu.el.
 ;; (defun sml-mode-menu-bar ()
 ;;   "Make sure menus appear in the menu bar as well as under mouse 3."
@@ -140,7 +139,7 @@ notion of \"the end of an outline\".")
   "Symbols matching the `end' symbol.")
 
 (defconst sml-begin-syms-re
-  (sml-syms-re "let" "abstype" "local" "struct" "sig")
+  (sml-syms-re sml-begin-syms)
   "Symbols matching the `end' symbol.")
 
 ;; (defconst sml-user-begin-symbols-re
@@ -195,13 +194,21 @@ notion of \"the end of an outline\".")
      ("in" . t)))
   "Words which might delegate indentation to their parent.")
 
-(defconst sml-symbol-indent
+(defcustom sml-symbol-indent
   '(("fn" . -3)
     ("of" . 1)
     ("|" . -2)
+    ("," . -2)
+    (";" . -2)
     ;;("in" . 1)
     ("d=" . 2))
-  "Special indentation alist for some symbols.")
+  "Special indentation alist for some symbols.
+An entry like (\"in\" . 1) indicates that a line starting with the
+symbol `in' should be indented one char further to the right.
+This is only used in a few specific cases, so it does not work
+for all symbols and in all lines starting with the given symbol."
+  :group 'sml
+  :type '(repeat (cons string integer)))
 
 (defconst sml-open-paren
   (sml-preproc-alist

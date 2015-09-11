@@ -1,8 +1,6 @@
 # Makefile for emacs-lisp package
 
-#ident "@(#)v3_9_5:Makefile,v 1.11 2000/12/24 20:06:28 monnier Exp"
-
-# Copyright (C) 1998-1999  Stefan Monnier <monnier@cs.yale.edu>
+# Copyright (C) 1998, 1999, 2004  Stefan Monnier <monnier@gnu.org>
 
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -122,10 +120,8 @@ install_startup:
 	else \
 	    echo 'echo ";; load $(PACKAGE) setup code" >>$(startupfile)' ;\
 	    echo ";; load $(PACKAGE) setup code" >>$(startupfile) ;\
-	    echo 'echo "(add-to-list '\''load-path \"$(elcdir)\")" >>$(startupfile)' ;\
-	    echo "(add-to-list 'load-path \"$(elcdir)\")" >>$(startupfile) ;\
-	    echo 'echo "(load \"$(PACKAGE)-startup\")" >>$(startupfile)' ;\
-	    echo "(load \"$(PACKAGE)-startup\")" >>$(startupfile) ;\
+	    echo 'echo "(load \"$(elcdir)/$(PACKAGE)-startup\")" >>$(startupfile)' ;\
+	    echo "(load \"$(elcdir)/$(PACKAGE)-startup\")" >>$(startupfile) ;\
 	fi
 
 postscript: $(PACKAGE).ps
@@ -156,7 +152,7 @@ $(PACKAGE)-startup.el: $(ELFILES)
 ##
 
 TAG = $(shell echo v$(VERSION) | tr '.' '_')
-ftpdir=/home/ftp/pub/monnier/$(PACKAGE)
+ftpdir=/u/monnier/html/elisp/
 cvsmodule=$(shell cat CVS/Repository)
 cvsroot=$(shell cat CVS/Root)
 

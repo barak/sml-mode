@@ -1,7 +1,7 @@
-This is sml-mode.info, produced by Makeinfo version 3.12f from
-sml-mode.texi.
+Ceci est le fichier Info sml-mode.info, produit par Makeinfo version
+4.3 à partir sml-mode.texi.
 
-INFO-DIR-SECTION Editors
+INFO-DIR-SECTION Emacs
 START-INFO-DIR-ENTRY
 * sml:(sml-mode).	Emacs mode for editing SML
 END-INFO-DIR-ENTRY
@@ -13,7 +13,7 @@ SML Mode Info
 *************
 
 You are looking at the top node of the Info tree documenting SML-MODE
-(Version v3_9_5). Not all functions are documented here, but those that
+(Version v4_0). Not all functions are documented here, but those that
 aren't you probably won't miss. All commands and settable variables
 have built-in documentation, as per usual Emacs conventions.
 
@@ -280,12 +280,6 @@ hooks:
      type `M-x sml-mode'). This is one place to put your preferred key
      bindings. *Note Configuration::, for some examples.
 
- - Hook: sml-load-hook
-     Default: `nil'
-
-     Another, maybe better, place for key bindings. This hook is only
-     run when SML mode is loaded into Emacs. *Note Configuration::.
-
 
 File: sml-mode.info,  Node: Indentation,  Next: Magic Insertion,  Prev: Basics,  Up: SML Mode
 
@@ -469,7 +463,7 @@ This creates a process interaction buffer that inherits some key
 bindings from SML mode and from `comint' (*note Shell Mode:
 (emacs)Shell Mode.). Starting the ML compiler adds some functions to
 SML mode buffers so that program text can be communicated between
-editor and compiler (*note ML Interaction::.).
+editor and compiler (*note ML Interaction::).
 
    The name of the ML compiler is the first thing you should know how to
 specify:
@@ -515,14 +509,6 @@ set this in your `.emacs' with, e.g.:
      `inferior-sml-mode-hook' to set any `comint' buffer-local
      configurations for SML mode you like.
 
- - Hook: inferior-sml-load-hook
-     Default: `nil'
-
-     This hook is analogous to `sml-load-hook' and is run just after the
-     code for `inferior-sml-mode' is loaded into Emacs. Use this to set
-     process defaults, and preferred key bindings for the interaction
-     buffer.
-
  - Command: switch-to-sml
      Key: `C-c C-s'
 
@@ -538,7 +524,7 @@ set this in your `.emacs' with, e.g.:
      current buffer's default directory. This command allows the working
      directory to be changed, if the compiler can do this. The variable
      `sml-cd-command' specifies the compiler command to invoke (*note
-     Process Defaults::.).
+     Process Defaults::).
 
 
 File: sml-mode.info,  Node: ML Interaction,  Next: Tracking Errors,  Prev: Running ML,  Up: Interaction Mode
@@ -556,7 +542,7 @@ that will switch the input focus to the process buffer afterwards
 
      Send a `use file' command to the current ML process. The variable
      `sml-use-command' is used to define the correct template for the
-     command to invoke (*note Process Defaults::.). The default file is
+     command to invoke (*note Process Defaults::). The default file is
      the file associated with the current buffer, or the last file
      loaded if you are in the interaction buffer.
 
@@ -582,7 +568,7 @@ SML mode provides one customisable function for locating the source
 position of errors reported by the compiler. This should work whether
 you type `use "puzzle.sml";' into the interaction buffer, or use one of
 the mechanisms provided for sending programs directly to the
-compiler--*note ML Interaction::..
+compiler--*note ML Interaction::.
 
  - Command: next-error
      Key: `C-x`'
@@ -716,18 +702,18 @@ former keymap will also be available in the latter (e.g., `C-c`').
 to install your preferred key bindings. Given that the keymaps are
 global (variables):
 
-     (defun my-sml-load-hook () "Global defaults for SML mode"
-       (define-key   sml-mode-map "\C-cd" 'sml-cd))
-     (add-hook 'sml-load-hook 'my-sml-load-hook)
+     (defun my-sml-mode-hook () "Global defaults for SML mode"
+       (define-key sml-mode-map "\C-cd" 'sml-cd))
+     (add-hook 'sml-mode-hook 'my-sml-mode-hook)
 
 This has the effect of binding `sml-cd' to the key `C-c d'.  If you
 want the same behaviour from `C-c d' in the ML buffer:
 
-     (defun my-inf-sml-load-hook () "Global defaults for inferior SML mode"
+     (defun my-inf-sml-mode-hook () "Global defaults for inferior SML mode"
        (define-key inferior-sml-mode-map "\C-cd" 'sml-cd)
        ;; NB. for SML/NJ '96
        (setq sml-cd-command "OS.FileSys.chDir \"%s\""))
-     (add-hook 'inferior-sml-load-hook 'my-inf-sml-load-hook)
+     (add-hook 'inferior-sml-mode-hook 'my-inf-sml-mode-hook)
 
    There is nothing to stop you rebuilding the entire keymap for SML
 mode and the ML interaction buffer in your `.emacs' of course: SML mode
@@ -767,6 +753,7 @@ Advanced Topics
 
            _These forms are bloody useless; can't we have better ones?_
 
+
 You can indeed. `sml-insert-form' is extensible so all you need to do
 is create the macros yourself. Define a _keybord macro_ (`C-x ('
 <something> `C-x )') and give it a suitable name:
@@ -778,16 +765,16 @@ session to the next, go to your `.emacs' file and call
 `insert-kbd-macro'; you'll need to add `NAME' to `sml-forms-alist'
 permanently yourself:
 
-     (defun my-sml-load-hook () "Global defaults for SML mode"
+     (defun my-sml-mode-hook () "Global defaults for SML mode"
        ;; whatever else you do
        (add-to-list 'sml-forms-alist '("NAME" . FUNCTION)))
 
    If you want to create templates like `case' that prompt for
 parameters you'll have to do some Lisp programming. The `skeleton'
 package is a good stating point.  Better yet, you can reuse the
-wrappers used by sml-mode itself in your sml-load-hook:
+wrappers used by sml-mode itself in your sml-mode-hook:
 
-     (add-hook 'sml-load-hook
+     (add-hook 'sml-mode-hook
        (lambda ()
          (sml-def-skeleton "case" "Case expr: "
            str " of" \n _ " => ")))
@@ -796,15 +783,20 @@ wrappers used by sml-mode itself in your sml-load-hook:
 line.  See the documentation of `skeleton-insert' to get a better
 understanding of how this works.
 
-                 _I hate that indentation algorithm; can't I tweak it?_
+
+_I hate that indentation algorithm; can't I tweak it?_
+
 
 Ah, yes, of course, but this manual will not tell you how.
 
-          _Can SML mode handle more than one compiler running at once?_
+
+_Can SML mode handle more than one compiler running at once?_
 
    Sure, just rename the `*sml*' buffer and then use `run-sml' as usual.
 
-                 _What needs to be done to support other ML compilers?_
+
+_What needs to be done to support other ML compilers?_
+
 
 Not much really.  Just add the right regular expressions to
 `sml-error-regexp-alist' and that should be all.
@@ -845,14 +837,12 @@ Variable Index
 
 * Menu:
 
-* inferior-sml-load-hook:                Running ML.
 * inferior-sml-mode-hook:                Running ML.
 * sml-cd-command:                        Process Defaults.
 * sml-default-arg:                       Running ML.
 * sml-electric-semi-mode:                Magic Insertion.
 * sml-error-regexp-alist:                Process Defaults.
 * sml-indent-level:                      SML Mode Defaults.
-* sml-load-hook:                         Basics.
 * sml-mode-hook:                         Basics.
 * sml-mode-info:                         Getting Help.
 * sml-program-name:                      Running ML.
@@ -868,50 +858,50 @@ Key Index
 * Menu:
 
 * ;:                                     Magic Insertion.
+* <LFD>:                                 Indentation.
+* <TAB>:                                 Indentation.
+* C-c <RET>:                             Magic Insertion.
 * C-c C-b:                               ML Interaction.
 * C-c C-i:                               Getting Help.
 * C-c C-l:                               ML Interaction.
 * C-c C-r:                               ML Interaction.
 * C-c C-s:                               Running ML.
-* C-c <RET>:                             Magic Insertion.
 * C-M-\:                                 Indentation.
-* C-x`:                                  Tracking Errors.
 * C-x ;:                                 Indentation.
 * C-x <TAB>:                             Indentation.
-* <LFD>:                                 Indentation.
-* M-|:                                   Magic Insertion.
+* C-x`:                                  Tracking Errors.
 * M-;:                                   Indentation.
 * M-<LFD>:                               Indentation.
-* M-SPC:                                 Magic Insertion.
 * M-<TAB>:                               Indentation.
-* <TAB>:                                 Indentation.
+* M-SPC:                                 Magic Insertion.
+* M-|:                                   Magic Insertion.
 
 
 
 Tag Table:
-Node: Top190
-Node: Copying1781
-Node: Introduction2590
-Node: Contributors4002
-Node: Getting Started5465
-Node: Getting Help7165
-Node: SML Mode9025
-Node: Basics9829
-Node: Indentation10919
-Node: Magic Insertion13016
-Node: SML Mode Defaults15217
-Node: Interaction Mode15769
-Node: Running ML17114
-Node: ML Interaction20252
-Node: Tracking Errors21392
-Node: Process Defaults22087
-Node: Configuration23958
-Node: Hooks24462
-Node: Key Bindings26305
-Node: Highlighting27873
-Node: Advanced Topics28870
-Node: Command Index30844
-Node: Variable Index32023
-Node: Key Index32879
+Node: Top207
+Node: Copying1796
+Node: Introduction2605
+Node: Contributors4017
+Node: Getting Started5480
+Node: Getting Help7180
+Node: SML Mode9040
+Node: Basics9844
+Node: Indentation10751
+Node: Magic Insertion12848
+Node: SML Mode Defaults15049
+Node: Interaction Mode15601
+Node: Running ML16946
+Node: ML Interaction19800
+Node: Tracking Errors20939
+Node: Process Defaults21633
+Node: Configuration23504
+Node: Hooks24008
+Node: Key Bindings25851
+Node: Highlighting27417
+Node: Advanced Topics28414
+Node: Command Index30350
+Node: Variable Index31529
+Node: Key Index32283
 
 End Tag Table

@@ -1,27 +1,68 @@
-(* copyright 1999 YALE FLINT project *)
-(* monnier@cs.yale.edu *)
+(* Copyright 1999, 2004 Stefan Monnier <monnier@gnu.org> *)
 
 (let val a = 1 val b = 2
-     val c = 3
+     val c = 3
  in 1
- end)
+ end);
+
+(* sml-mode here treats the second `=' as an equal op because it assumes
+ * that the first is the definitional equal for the structure.  FIXME!  *)
+functor foo (structure s : S) where type t = s.t =
+struct
+val bar = 0
+val ber = 1;
+val sdfg = 1
+end
 
 (x := 1;
  case x of
      FOO => 1
-   | BAR => 2;
+   | BAR =>
+     2;
  case x of
      FOO => 1
    | BAR =>
      (case y of
 	  FAR => 2
 	| FRA => 3);
- hello)
+ hello);
 
 let datatype foobar
       = FooB of int
       | FooA of bool * int
-		
+    datatype foo = FOO | BAR of baz
+	 and baz = BAZ | QUUX of foo
+
+    datatype foo = FOO
+                 | BAR of baz
+      and baz = BAZ			(* fixindent *)
+	      | QUUX of foo
+      and b = g
+
+    datatype foo = datatype M.foo
+    val _ = 42 val x = 5
+		       
+    signature S = S' where type foo = int
+    val _ = 42
+
+    val foo = [
+	"blah"
+      , let val x = f 42 in g (x,x,44) end
+    ]
+	      
+    val foo = [ "blah"
+	      , let val x = f 42 in g (x,x,44) end
+	      , foldl (fn ((p,q),s) => g (p,q,Vector.length q) ^ ":" ^ s)
+                      "" (Beeblebrox.masterCountList mlist2)
+              , if null mlist2 then ";" else ""
+	      ]
+	      
+    fun foo (true::rest)
+      = 1 + 2 * foo rest
+      | foo (false::rest)
+      = let val _ = 1 in 2 end
+	+ 2 * foo rest
+
     val x = if foo then
 		1
 	    else if bar then
@@ -33,6 +74,9 @@ let datatype foobar
 	    else if foo
 	    then 2
 	    else 3
+
+  ; val yt = 4
+
 in
     if a then b else c;
     case M.find(m,f)
@@ -42,33 +86,50 @@ in
     x := x + 1;
     (case foo
       of a => f
-     )
-end
+    )
+end;
 
 let
 in a;
-   b
-end
+   foo("(*")
+   * 2;
+end;
+
+let
+in a
+ ; b
+end;
+
+let
+in
+    a
+  ; b
+end;
 
 let
 in if a then
        b
    else
        c
-end
+end;
 
 let
 in case a of
-    (* Do I really want that ? *)
-    F => 1
+       F => 1
+     | D => 2
+end;
+
+let
+in case a
+ of F => 1
   | D => 2
-end
+end;
 
 let
 in if a then b else
    c
-end
-    
+end;
+
 structure Foo = struct
 val x = 1
 end
@@ -78,7 +139,7 @@ sig
     type flint = FLINT.prog
     val split: flint -> flint * flint option
 end
-    
+
 structure FSplit :> FSPLIT =
 struct
 
@@ -147,7 +208,7 @@ fun sexp env lexp =			(* fixindent *)
 	       then (leE, leI, fvI, leRet)
 	       else (leE, lewrap leI, addvs(S_rmv(lv, fvI), vs), leRet)
 	    end
-		
+	    
     in case lexp
 	(* we can completely move both RET and TAPP to the I part *)
 	of F.RECORD (rk,vs,lv,le as F.RET [F.VAR lv']) =>
@@ -186,7 +247,7 @@ fun sexp env lexp =			(* fixindent *)
 	   let val (leE,leI,fvI,leRet) = sexp (S.union(S.addList(S.empty, lvs), env)) le
 	   in (fn e => F.LET(lvs, body, leE e), leI, fvI, leRet)
 	   end
-	       
+	   
 	 (* useless sophistication *)
 	 | F.APP (F.VAR f,args) =>
 	   if funeffect f
@@ -198,7 +259,7 @@ fun sexp env lexp =			(* fixindent *)
 	 | (F.SWITCH _ | F.RAISE _ | F.BRANCH _ | F.HANDLE _) =>
 	   (fn e => e, F.RET[], S.empty, lexp)
     end
-	
+    
 (* Functions definitions fall into the following categories:
  * - inlinable:  if exported, copy to leI
  * - (mutually) recursive:  don't bother
@@ -222,7 +283,7 @@ and sfix env (fdecs,le) =
 	   
 	 | _ => (nleE, leI, fvI, leRet)
     end
-	
+    
 and sfdec env (leE,leI,fvI,leRet) (fk,f,args,body) =
     let val benv = S.union(S.addList(S.empty, map #1 args), env)
 	val (bodyE,bodyI,fvbI,bodyRet) = sexp benv body
@@ -250,12 +311,6 @@ and sfdec env (leE,leI,fvI,leRet) (fk,f,args,body) =
 			  known=true, isrec=NONE}
 	       val argsI =
 		   (map (fn lv => (lv, getLty(F.VAR lv))) fvbIs) @ args
-	       (* val argI = mklv()
-		  val argsI = (argI, LT.ltc_str(map (getLty o F.VAR) fvbIs))::args
-			      
-		  val (_,bodyI) = foldl (fn (lv,(n,le)) =>
-					    (n+1, F.SELECT(F.VAR argI, n, lv, le)))
-					(0, bodyI) fvbIs *)
 	       val fdecI as (_,fI,_,_) = FU.copyfdec(fkI,f,argsI,bodyI)
 	       val _ = addpurefun fI
 		       
@@ -284,7 +339,7 @@ and sfdec env (leE,leI,fvI,leRet) (fk,f,args,body) =
 		    leRet)
 	   end
     end
-	
+    
 (* TFNs are kinda like FIX except there's no recursion *)
 and stfn env (tfdec as (tfk,tf,args,body),le) =
     let val (bodyE,bodyI,fvbI,bodyRet) =
@@ -317,9 +372,9 @@ and stfn env (tfdec as (tfk,tf,args,body),le) =
 	       (* tfdecI *)
 	       val tfkI = {inline=F.IH_ALWAYS}
 	       val argsI = map (fn (v,k) => (cplv v, k)) args
-	       val tmap = ListPair.map (fn (a1,a2) =>
-					(#1 a1, LT.tcc_nvar(#1 a2)))
-				       (args, argsI)
+	       (* val tmap = ListPair.map (fn (a1,a2) =>
+	        * 				(#1 a1, LT.tcc_nvar(#1 a2)))
+	        * 			       (args, argsI) *)
 	       val bodyI = FU.copy tmap M.empty
 				   (F.LET(fvbIs, F.TAPP(F.VAR tfE, map #2 tmap),
 					  bodyI))
@@ -335,7 +390,7 @@ and stfn env (tfdec as (tfk,tf,args,body),le) =
 		    leRet)
 	   end
     end
-	
+    
 (* here, we use B-decomposition, so the args should not be
  * considered as being in scope *)
 val (bodyE,bodyI,fvbI,bodyRet) = sexp S.empty body
@@ -368,11 +423,11 @@ in case (bodyI, bodyRet)
 			      F.APP(F.VAR fI, [F.VAR argI]))))),
 	   NONE) *)
        end
-	   
+       
      | _ => (fdec, NONE)		(* sorry, can't do that *)
 (* (PPFlint.printLexp bodyRet; bug "couldn't find the returned record") *)
 	    
 end
-    
+				       
 end
 end

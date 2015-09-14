@@ -11,4 +11,4 @@ override_dh_installinfo: sml-mode.info
 
 override_dh_install:
 	dh_install
-	dh_elpa -pelpa-sml-mode
+	dh_elpa

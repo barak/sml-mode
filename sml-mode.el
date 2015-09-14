@@ -129,7 +129,8 @@
 
 (defcustom sml-indent-level 4
   "Basic indentation step for SML code."
-  :type 'integer)
+  :type 'integer
+  :safe 'integerp)
 
 (defcustom sml-indent-args sml-indent-level
   "Indentation of args placed on a separate line."

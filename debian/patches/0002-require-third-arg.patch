@@ -9,16 +9,15 @@ See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=732996
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/sml-mode.el b/sml-mode.el
-index 36e5afe..cc93ff3 100644
+index 85fcdcf..dbae4af 100644
 --- a/sml-mode.el
 +++ b/sml-mode.el
-@@ -68,8 +68,8 @@
+@@ -114,7 +114,7 @@
  ;;; Code:
  
  (eval-when-compile (require 'cl))
 -(require 'smie nil 'noerror)
- 
 +(condition-case nil (require 'smie)     (error nil))
- (condition-case nil (require 'skeleton) (error nil))
+ (require 'electric)
  
  (defgroup sml ()

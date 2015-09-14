@@ -1,0 +1,27 @@
+From: "Barak A. Pearlmutter" <barak+git@pearlmutter.net>
+Date: Mon, 14 Sep 2015 14:46:25 +0100
+Subject: safe local variable
+
+Declare sml-indent-level to be safe for per-file initialization.
+See https://bugs.debian.org/717440
+which suggests
+    (put 'sml-indent-level 'safe-local-variable 'integerp)
+This patch instead adds an option to defcustom.
+---
+ sml-mode.el | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/sml-mode.el b/sml-mode.el
+index dbae4af..8939ee9 100644
+--- a/sml-mode.el
++++ b/sml-mode.el
+@@ -123,7 +123,8 @@
+ 
+ (defcustom sml-indent-level 4
+   "Basic indentation step for SML code."
+-  :type 'integer)
++  :type 'integer
++  :safe 'integerp)
+ 
+ (defcustom sml-indent-args sml-indent-level
+   "Indentation of args placed on a separate line."

@@ -3,7 +3,7 @@ Section: editors
 Priority: optional
 Maintainer: Debian Emacs addons team <pkg-emacsen-addons@lists.debian.org>
 Uploaders: Barak A. Pearlmutter <bap@debian.org>
-Build-Depends: debhelper (>= 9), dh-elpa (>= 0.0.8)
+Build-Depends: debhelper (>= 9), dh-elpa (>= 0.0.8), texinfo
 Standards-Version: 3.9.6
 Homepage: https://elpa.gnu.org/packages/sml-mode.html
 Vcs-Git: git://anonscm.debian.org/pkg-emacsen/pkg/sml-mode.git

@@ -1,3 +1,9 @@
+sml-mode (6.7-2) unstable; urgency=medium
+
+  * rebuild with newer dh-elpa, this should (closes: #802154)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 20 Oct 2015 10:40:52 +0100
+
 sml-mode (6.7-1) unstable; urgency=medium
 
   * new maintainer adopting this poor orphaned package!

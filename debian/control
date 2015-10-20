@@ -24,7 +24,6 @@ Description: Emacs major mode for editing Standard ML programs
 Package: sml-mode
 Architecture: all
 Depends: ${misc:Depends}, elpa-sml-mode
-Enhances: mlton, mosml
 Description: Transition package, sml-mode to elpa-sml-mode
  Sml-mode has been elpafied.  Ease Transition from sml-mode to
  elpa-sml-mode with this dummy package.

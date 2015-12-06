@@ -1,14 +1,10 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	dh $@ --with elpa --parallel
 
 sml-mode.info: sml-mode.texi
 	texi2any $<
 
 override_dh_installinfo: sml-mode.info
 	dh_installinfo
-
-override_dh_install:
-	dh_install
-	dh_elpa

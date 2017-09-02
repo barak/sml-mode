@@ -11,7 +11,8 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-emacsen/pkg/sml-mode.git
 
 Package: elpa-sml-mode
 Architecture: all
-Depends: ${misc:Depends}, emacsen-common
+Depends: ${misc:Depends}, ${elpa:Depends}
+Built-Using: ${misc:Built-Using}
 Breaks: sml-mode (<< 6.7)
 Enhances: mlton, mosml, smljn, emacs
 Description: Emacs major mode for editing Standard ML programs

@@ -50,7 +50,7 @@ sml-mode (5.0-1) unstable; urgency=low
   * Set maintainer to Debian QA Group <packages@qa.debian.org>.
   * New upstream release.
     + Refresh existing patches.
-    + find_match_stop_at_end_or_beginning_of_buffer.diff - 
+    + find_match_stop_at_end_or_beginning_of_buffer.diff -
       Update to patch sml-oldindent.el instead of sml-move.el.
     + sml-compat.el removed and so are old defvars. (Closes: #681922, #710746).
   * Add texi_build_errors patch to fix texi errors. (Closes: #712352).
@@ -128,7 +128,7 @@ sml-mode (4.0-3) experimental; urgency=low
 
   * Fixed the automatic pacthing of bug#286190.
   * Fixed the get-orig-source target in debian/rules.
-  
+
  -- Jens Peter Secher <jps@debian.org>  Sat, 18 Dec 2004 16:46:10 +0100
 
 sml-mode (4.0-2) experimental; urgency=low
@@ -158,7 +158,7 @@ sml-mode (3.9.5-10) unstable; urgency=low
   * Applied patch from Sebastian Schaffert to fix xemacs problem when
     sending the buffer contents to the interpreter. Part of bug#274266.
   * Included a watch file.
-    
+
  -- Jens Peter Secher <jps@debian.org>  Sun, 10 Oct 2004 00:29:58 +0200
 
 sml-mode (3.9.5-9) unstable; urgency=low

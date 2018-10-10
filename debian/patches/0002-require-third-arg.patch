@@ -1,0 +1,23 @@
+From: "Aaron M. Ucko" <ucko@debian.org>
+Date: Mon, 23 Dec 2013 13:00:02 -0500
+Subject: require third arg
+
+Work around xemacs21 not supporting three-arg require form.
+See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=732996
+---
+ sml-mode.el | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sml-mode.el b/sml-mode.el
+index dc51c99..3884ad0 100644
+--- a/sml-mode.el
++++ b/sml-mode.el
+@@ -115,7 +115,7 @@
+ ;;; Code:
+ 
+ (eval-when-compile (require 'cl-lib))
+-(require 'smie nil 'noerror)
++(condition-case nil (require 'smie)     (error nil))
+ (require 'electric)
+ 
+ (defgroup sml ()

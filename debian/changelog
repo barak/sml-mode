@@ -7,6 +7,7 @@ sml-mode (6.9-3) UNRELEASED; urgency=medium
   * debian/copyright: use spaces rather than tabs to start continuation
     lines.
   * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
 
  -- David Krauser <david@krauser.org>  Fri, 04 Oct 2019 14:56:38 -0400
 

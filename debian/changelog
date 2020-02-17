@@ -1,6 +1,11 @@
 sml-mode (6.9-3) UNRELEASED; urgency=medium
 
+  [ David Krauser ]
   * Update maintainer email address
+
+  [ Barak A. Pearlmutter ]
+  * debian/copyright: use spaces rather than tabs to start continuation
+    lines.
 
  -- David Krauser <david@krauser.org>  Fri, 04 Oct 2019 14:56:38 -0400
 

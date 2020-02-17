@@ -8,6 +8,7 @@ sml-mode (6.9-3) UNRELEASED; urgency=medium
     lines.
   * Bump debhelper from old 11 to 12.
   * Set debhelper-compat version in Build-Depends.
+  * Remove unnecessary ${misc:Built-Using} for elpa-sml-mode
 
  -- David Krauser <david@krauser.org>  Fri, 04 Oct 2019 14:56:38 -0400
 

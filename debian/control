@@ -1,10 +1,11 @@
 Source: sml-mode
 Section: editors
 Priority: optional
-Maintainer: Debian Emacs addons team <pkg-emacsen-addons@lists.alioth.debian.org>
+Maintainer: Debian Emacsen Team <debian-emacsen@lists.debian.org>
 Uploaders: Barak A. Pearlmutter <bap@debian.org>
-Build-Depends: debhelper (>= 11), dh-elpa (>= 0.0.17), texinfo
-Standards-Version: 4.2.1
+Build-Depends: debhelper-compat (= 12), dh-elpa (>= 0.0.17), texinfo
+Rules-Requires-Root: no
+Standards-Version: 4.5.0
 Homepage: https://elpa.gnu.org/packages/sml-mode.html
 Vcs-Git: https://salsa.debian.org/emacsen-team/sml-mode.git
 Vcs-Browser: https://salsa.debian.org/emacsen-team/sml-mode
@@ -12,7 +13,6 @@ Vcs-Browser: https://salsa.debian.org/emacsen-team/sml-mode
 Package: elpa-sml-mode
 Architecture: all
 Depends: ${misc:Depends}, ${elpa:Depends}
-Built-Using: ${misc:Built-Using}
 Breaks: sml-mode (<< 6.7)
 Enhances: mlton, mosml, smljn, emacs
 Description: Emacs major mode for editing Standard ML programs

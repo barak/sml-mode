@@ -31,7 +31,7 @@ License: GPL-3+
 
 Files: debian/*
 Copyright: 2001-2011, Jens Peter Secher <jps@debian.org>
-	   2013, Barry deFreese <bdefreese@debian.org>
-	   2015, Barak A. Pearlmutter <bap@debian.org>
+           2013, Barry deFreese <bdefreese@debian.org>
+           2015, Barak A. Pearlmutter <bap@debian.org>
 License: Public-Domain
  This material is released to the public domain.

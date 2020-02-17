@@ -1,3 +1,19 @@
+sml-mode (6.10-1) unstable; urgency=medium
+
+  [ David Krauser ]
+  * Update maintainer email address
+
+  [ Barak A. Pearlmutter ]
+  * New upstream version
+  * debian/copyright: use spaces rather than tabs to start continuation
+    lines.
+  * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Remove unnecessary ${misc:Built-Using} for elpa-sml-mode
+  * Bump policy
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Mon, 17 Feb 2020 23:14:26 +0000
+
 sml-mode (6.9-2) unstable; urgency=medium
 
   * Team upload.

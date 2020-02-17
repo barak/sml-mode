@@ -1,0 +1,37 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: sml-mode
+Source: https://elpa.gnu.org/packages/sml-mode.html
+
+Files: *
+Copyright:
+    1999-2015 Stefan Monnier <monnier+lists/emacs/sml@tequila.cs.yale.edu>
+    1994-1997 Matthew J. Morley <mjm@scs.leeds.ac.uk>
+    1989 Lars Bo Nielsen, Olin Shivers, Fritz Knabe, Steven Gilmore, Matthias Blume
+License: GPL-3+
+ This program is free software; you can redistribute it
+ and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later
+ version.
+ .
+ This program is distributed in the hope that it will be
+ useful, but WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the GNU General Public License for more
+ details.
+ .
+ You should have received a copy of the GNU General Public
+ License along with this package; if not, write to the Free
+ Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 3 can be found in the file
+ `/usr/share/common-licenses/GPL-3'.
+
+Files: debian/*
+Copyright: 2001-2011, Jens Peter Secher <jps@debian.org>
+           2013, Barry deFreese <bdefreese@debian.org>
+           2015, Barak A. Pearlmutter <bap@debian.org>
+License: Public-Domain
+ This material is released to the public domain.

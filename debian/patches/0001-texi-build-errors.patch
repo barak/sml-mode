@@ -1,0 +1,27 @@
+From: Barry deFreese <bdefreese@debian.org>
+Date: Wed, 17 Jul 2013 19:39:54 -0400
+Subject: texi build errors
+
+Fix errors when generating info file.
+The @center construct hates curly braces, so remove them.
+
+Bug-Debian: http://bugs.debian.org/712352
+---
+ sml-mode.texi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sml-mode.texi b/sml-mode.texi
+index d9980f7..d61372f 100644
+--- a/sml-mode.texi
++++ b/sml-mode.texi
+@@ -34,8 +34,8 @@
+ @center @titlefont{Editing and Running Standard ML}
+ @center @titlefont{under GNU Emacs}
+ @sp 5
+-@center {SML mode, Version $Name$}
+-@center {August 1999}
++@center SML mode, Version $Name$
++@center August 1999
+ @sp 2
+ @author Authors: Matthew J.@: Morley and Stefan Monnier
+ 

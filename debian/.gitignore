@@ -1,6 +1,7 @@
 /*.debhelper
 /*.debhelper.log
 /*.substvars
+/debhelper-build-stamp
 /elpa-sml-mode/
 /files
 /sml-mode/

@@ -3,7 +3,7 @@ Section: editors
 Priority: optional
 Maintainer: Debian Emacsen Team <debian-emacsen@lists.debian.org>
 Uploaders: Barak A. Pearlmutter <bap@debian.org>
-Build-Depends: debhelper-compat (= 12), dh-elpa (>= 0.0.17), texinfo
+Build-Depends: debhelper-compat (= 13), dh-elpa (>= 0.0.17), texinfo
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
 Homepage: https://elpa.gnu.org/packages/sml-mode.html

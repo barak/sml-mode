@@ -1,0 +1,12 @@
+This was packaged using the sources found at
+ https://github.com/emacsmirror/sml-mode
+up through version 6.10. The upstream was folded into ELPA after that, at
+ https://elpa.gnu.org/packages/sml-mode.html
+where a tarball was available. Direct access to the upstream
+development repository is as branch externals/sml-mode of the ELPA repository.
+As of 4-May-2025 the web site claims that repo can be accessed at
+ https://git.savannah.gnu.org/git/emacs/elpa.git
+but that fails. However, an obsolete protocol works
+ git://git.savannah.gnu.org/emacs/elpa.git
+so I use the following command:
+ git clone --single-branch --branch externals/sml-mode git://git.savannah.gnu.org/emacs/elpa.git

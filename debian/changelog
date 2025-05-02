@@ -1,3 +1,11 @@
+sml-mode (6.10-3) UNRELEASED; urgency=medium
+
+  * Update debian/watch uscan support file.
+  * Add discussion of upstream access to README.source
+  * Bump policy
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Fri, 02 May 2025 10:53:17 +0100
+
 sml-mode (6.10-2) unstable; urgency=medium
 
   * Team upload.

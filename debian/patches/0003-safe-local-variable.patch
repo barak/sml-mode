@@ -12,10 +12,10 @@ This patch instead adds an option to defcustom.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/sml-mode.el b/sml-mode.el
-index 4a3b7b7..b1d2991 100644
+index 527638f..e87646c 100644
 --- a/sml-mode.el
 +++ b/sml-mode.el
-@@ -130,7 +130,8 @@
+@@ -136,7 +136,8 @@
  
  (defcustom sml-indent-level 4
    "Basic indentation step for SML code."

@@ -9,10 +9,10 @@ See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=732996
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/sml-mode.el b/sml-mode.el
-index 3612af9..4a3b7b7 100644
+index e609991..527638f 100644
 --- a/sml-mode.el
 +++ b/sml-mode.el
-@@ -121,7 +121,7 @@
+@@ -127,7 +127,7 @@
  ;;; Code:
  
  (eval-when-compile (require 'cl-lib))

@@ -11,7 +11,7 @@ Bug-Debian: http://bugs.debian.org/712352
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/sml-mode.texi b/sml-mode.texi
-index d9980f7..d61372f 100644
+index a1aaed7..4b8667c 100644
 --- a/sml-mode.texi
 +++ b/sml-mode.texi
 @@ -34,8 +34,8 @@

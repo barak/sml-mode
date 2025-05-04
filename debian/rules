@@ -6,4 +6,6 @@
 sml-mode.info: sml-mode.texi
 	texi2any $<
 
+ifeq ($(filter nodoc,$(DEB_BUILD_PROFILES)),)
 execute_before_dh_installinfo: sml-mode.info
+endif

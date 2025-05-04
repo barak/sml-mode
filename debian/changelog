@@ -8,8 +8,9 @@ sml-mode (6.12-1) unstable; urgency=medium
   * Update FSF address in debian/copyright
   * Quilt patch to fix broken info direntry
   * Conditionalize info build <!nodoc>
+  * Quilt patch to squelch texi warning
 
- -- Barak A. Pearlmutter <bap@debian.org>  Sun, 04 May 2025 13:09:33 +0100
+ -- Barak A. Pearlmutter <bap@debian.org>  Sun, 04 May 2025 13:25:50 +0100
 
 sml-mode (6.10-2) unstable; urgency=medium
 

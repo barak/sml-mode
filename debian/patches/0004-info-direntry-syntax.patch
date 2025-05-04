@@ -10,7 +10,7 @@ the previous line.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/sml-mode.texi b/sml-mode.texi
-index 4b8667c..23f7a2a 100644
+index 4b8667c..e3df1fb 100644
 --- a/sml-mode.texi
 +++ b/sml-mode.texi
 @@ -25,7 +25,7 @@
@@ -18,7 +18,7 @@ index 4b8667c..23f7a2a 100644
  @dircategory Emacs
  @direntry
 -* sml:(sml-mode).	Emacs mode for editing SML
-+* sml: (sml-mode).	Emacs mode for editing SML
++* SML mode: (sml-mode).	        Emacs mode for editing SML
  @end direntry
  @setchapternewpage on
  

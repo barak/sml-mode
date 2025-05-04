@@ -1,9 +1,9 @@
 ;;; sml-mode.el --- Major mode for editing (Standard) ML  -*- lexical-binding: t; coding: utf-8 -*-
 
-;; Copyright (C) 1989-2020  Free Software Foundation, Inc.
+;; Copyright (C) 1989-2023  Free Software Foundation, Inc.
 
 ;; Maintainer: Stefan Monnier <monnier@iro.umontreal.ca>
-;; Version: 6.10
+;; Version: 6.11
 ;; Keywords: SML
 ;; Author:	Lars Bo Nielsen
 ;;		Olin Shivers
@@ -27,7 +27,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -56,6 +56,7 @@
 ;; - new var sml-abbrev-skeletons to control whether to include skeletons
 ;;   in the main abbrev table.
 ;; - change parsing rule of "local"
+;; - Improve handling of comments in `sml-cm-mode'.
 
 ;;;;; Changes since 5.0:
 
@@ -1744,7 +1745,13 @@ MAINFILE is the top level file of the project."
 (define-derived-mode sml-cm-mode fundamental-mode "SML-CM"
   "Major mode for SML/NJ's Compilation Manager configuration files."
   (setq-local sml-prog-proc-descriptor sml-pp-functions)
-  (setq-local font-lock-defaults '(sml-cm-font-lock-keywords nil t nil nil)))
+  (setq-local font-lock-defaults '(sml-cm-font-lock-keywords nil t nil nil))
+  (setq-local comment-start "(* ")
+  (setq-local comment-end " *)")
+  (setq-local comment-start-skip "(\\*+\\s-*")
+  (setq-local comment-end-skip "\\s-*\\*+)")
+  ;; No need to quote nested comments markers.
+  (setq-local comment-quote-nested nil))
 
 ;;;
 ;;; ML-Lex support
@@ -1853,133 +1860,6 @@ If nil, align it with previous cases."
   (setq-local font-lock-defaults sml-yacc-font-lock-defaults))
 
 
-
-;;;; ChangeLog:
-
-;; 2020-02-10  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el: Parse "local" correctly
-;; 
-;; 	Also use `setq-local` and `defvar-local`.
-;; 
-;; 	(sml-smie--pending-token): New var.
-;; 	(sml-smie-forward-token, sml-smie-backward-token): Use it for "local".
-;; 	(sml-smie-rules): Drop ad-hoc indentation rule for "local".
-;; 
-;; 2018-10-08  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el: New var sml-abbrev-skeletons; bump vers to 6.9
-;; 
-;; 2017-12-12  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	Bump version to make new release
-;; 
-;; 2016-10-26  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el (sml-smie-rules): Remove incoherent
-;; 	rule.
-;; 
-;; 2016-08-14  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el (sml-tyvarseq-re): Backtrack less
-;; 	(bug#24205)
-;; 
-;; 2016-08-04  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode/sml-mode.el: Use cl-lib.
-;; 
-;; 2016-07-11  Paul Eggert	 <eggert@cs.ucla.edu>
-;; 
-;; 	Fix some quoting problems in doc strings
-;; 
-;; 	Most of these are minor issues involving, e.g., quoting `like this' 
-;; 	instead of 'like this'.	 A few involve escaping ` and ' with a preceding
-;; 	\= when the characters should not be turned into curved single quotes.
-;; 
-;; 2015-02-12  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode/sml-mode.el: Bump version to make a new release
-;; 
-;; 2015-02-12  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode/sml-mode.el (sml-smie-rules): Work around Emacs-24.3 bug.
-;; 
-;; 2015-02-09  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el: Add prettify-symbols-mode and Poly/ML support
-;; 
-;; 	(sml-font-lock-symbols): Mark obsolete.
-;; 	(sml-font-lock-compose-symbol): Use symbol-boundaries rather 
-;; 	word-boundaries.
-;; 	(sml-smie-rules): Tweak indentation after "fun".
-;; 	(sml-smie-definitional-equal-p): Handle ":>".
-;; 	(sml-prog-proc-send-string): Try and avoid mixing prompt/userinput and 
-;; 	process output on the same line.
-;; 	(sml-error-regexp-alist): Add Poly/ML support.
-;; 	(sml-mode): Add prettify-symbols-mode support.
-;; 
-;; 2014-10-15  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el (sml-smie-grammar): Add "withtype".
-;; 	(sml-smie-rules): Use pcase.
-;; 	(sml-smie-non-nested-of-p): Rewrite to avoid regexp and stay closer to
-;; 	point.
-;; 
-;; 2014-06-17  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode/sml-mode.el: Release new version.
-;; 
-;; 2014-06-04  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el (sml--rightalign-and-p): New function.
-;; 
-;; 2014-06-03  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode/sml-mode.el (sml-smie-grammar): Add include&sharing.
-;; 	(sml-smie-rules): Add functor rule.
-;; 	(sml-smie-definitional-equal-p): Use smie-backward-sexp.
-;; 
-;; 2013-12-27  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el (sml-smie-rules): Adjust for new :close-all rule.
-;; 
-;; 2013-03-03  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el (sml-imenu-regexp): Make it a const.
-;; 	(sml-imenu-create-index): Don't assume we'll find an = after structure.
-;; 
-;; 2013-01-24  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode: Release 6.3, bugfixes
-;; 
-;; 2013-01-24  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el (sml-mode-variables): Set sml-prog-proc-descriptor here...
-;; 	(sml-mode): ... instead of here.
-;; 
-;; 2013-01-24  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el (inferior-sml-mode): Fix comint-completion-addsuffix.
-;; 
-;; 2012-12-04  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* packages/sml-mode/sml-mode.el (sml-mode-map): Add back C-c C-s
-;; 	binding.
-;; 	(sml-prog-proc-switch-to): Add missing interactive spec.
-;; 
-;; 2012-10-31  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	* sml-mode.el: Integrate BUGS&NEWS; re-add run-sml.
-;; 
-;; 2012-10-22  Stefan Monnier  <monnier@iro.umontreal.ca>
-;; 
-;; 	Add SML-mode.
-;; 
-;; 	git-subtree-dir: packages/sml-mode git-subtree-mainline:
-;; 	a50c62a632aa422957a0e4224d5c6e4c2366156b git-subtree-split:
-;; 	d2ef91a138487b521bb7e08722b8d122aa757b5a
-;; 
-
 (provide 'sml-mode)
 
 ;;; sml-mode.el ends here

@@ -1,0 +1,24 @@
+From: "Barak A. Pearlmutter" <barak+git@pearlmutter.net>
+Date: Sun, 4 May 2025 12:08:22 +0100
+Subject: info direntry syntax
+
+The space in "sml: (sml-mode)" is mandatory. Without it you get a
+broken info dir file, with the sml mode entry jammed onto the end of
+the previous line.
+---
+ sml-mode.texi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sml-mode.texi b/sml-mode.texi
+index 4b8667c..23f7a2a 100644
+--- a/sml-mode.texi
++++ b/sml-mode.texi
+@@ -25,7 +25,7 @@
+ @settitle SML mode - The Emacs SML editing mode
+ @dircategory Emacs
+ @direntry
+-* sml:(sml-mode).	Emacs mode for editing SML
++* sml: (sml-mode).	Emacs mode for editing SML
+ @end direntry
+ @setchapternewpage on
+ 

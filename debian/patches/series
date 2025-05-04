@@ -1,3 +1,4 @@
 0001-texi-build-errors.patch
 0002-require-third-arg.patch
 0003-safe-local-variable.patch
+0004-info-direntry-syntax.patch

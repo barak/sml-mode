@@ -6,8 +6,9 @@ sml-mode (6.12-1) unstable; urgency=medium
   * New upstream version
   * Update quilt patch magic hashes (no content or context changes)
   * Update FSF address in debian/copyright
+  * Quilt patch to fix broken info direntry
 
- -- Barak A. Pearlmutter <bap@debian.org>  Sun, 04 May 2025 11:51:17 +0100
+ -- Barak A. Pearlmutter <bap@debian.org>  Sun, 04 May 2025 12:08:55 +0100
 
 sml-mode (6.10-2) unstable; urgency=medium
 
